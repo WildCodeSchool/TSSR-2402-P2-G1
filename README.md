@@ -27,7 +27,7 @@ Depuis un serveur, cibler une machine cliente avec un type d’OS différent.
 
 ### Choix techniques 
 
-Environement imposé par le client :
+Environment imposé par le client :
 
 |   Nom    | Fonction |  Operating System   |    Compte     | Mot de passe |  Adresse IP  | CIDR  |
 | :------: | :------: | :-----------------: | :-----------: | :----------: | :----------: | :---: |
@@ -50,5 +50,5 @@ BURN PowerShell BURN !
 
 ### Next step
 
-Utiliser les scripts Bash dans un environement Microsoft.
-Utiliser les scripts PowerShell dans un environement Linux.
+Utiliser les scripts Bash dans un environment Microsoft.
+Utiliser les scripts PowerShell dans un environment Linux.
