@@ -10,15 +10,18 @@
     - 6. droit et permissions de l'utilisateur sur un dossier 
     - 7. droit et permissions de l'utilisateur sur un fichier
     - 8. recherche des evenements dans le fichier log_evt.log pour un utilisateur
+    - 9. Retour au menu précédent
 
   - #### 2. Action
-    - 1. creation d'un compte local
-    - 2. changer le mot de passe d'un compte
-    - 3. supression d'un compte utilisateur
-    - 4. desactivation d'un compte utilisateur local
-    - 5. ajout a un groupe d'administration
-    - 6. ajout a un groupe local
-    - 7. sortie d'un groupe local
+    - 1. changer le mot de passe d'un compte
+    - 2. supression d'un compte utilisateur
+    - 3. desactivation d'un compte utilisateur local
+    - 4. ajout a un groupe d'administration
+    - 5. ajout a un groupe local
+    - 6. sortie d'un groupe local
+    - 7. Retour au menu précédent
+
+  - #### 3. Retour au menu précédent
 
 - ### 2. Cible Ordinateur
   - #### 1. Information
@@ -34,18 +37,23 @@
     - 10. memoire RAM total
     - 11. Utilisation de la RAM
     - 12. recherche des evenements dans le fichier log_evt.log pour la machine
+    - 13. Retour au menu précédent
 
   - #### 2. Action
-    - 1. arret
-    - 2. redemarage
-    - 3. Verouilage
-    - 4. Mise a jour du systeme
-    - 5. creation de repertoire
-    - 6. modification de repertoire
-    - 7. supression d'un repertoire
-    - 8. prise de main a distance
-    - 9. activation du par-feu
-    - 10. desactivation du par-feu
-    - 11. instalation de logiciel
-    - 12. desinstalation de logiciel
-    - 13. Execution de script sur la machine distante
+    - 1. creation d'un compte local
+    - 2. arret
+    - 3. redemarage
+    - 4. Verouilage
+    - 5. Mise a jour du systeme
+    - 6. creation de repertoire
+    - 7. modification de repertoire
+    - 8. supression d'un repertoire
+    - 9. prise de main a distance
+    - 10. activation du par-feu
+    - 11. desactivation du par-feu
+    - 12. instalation de logiciel
+    - 13. desinstalation de logiciel
+    - 14. Execution de script sur la machine distante
+    - 15. Retour au menu précédent
+
+  - 3. Retour au menu précédent
