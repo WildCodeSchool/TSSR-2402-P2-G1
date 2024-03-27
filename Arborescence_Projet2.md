@@ -1,0 +1,51 @@
+## Arborescence
+
+- ### 1. Cible utilisateur 
+  - #### 1. Information
+    - 1. Date de derniere connexion
+    - 2. date de la derniere modification du mot de passe
+    - 3. liste des sessions ouvertes par l'utilisateur
+    - 4. a quelle groupe apartient l'utilisateur
+    - 5. liste des commandes utiliser par l'utilisateur
+    - 6. droit et permissions de l'utilisateur sur un dossier 
+    - 7. droit et permissions de l'utilisateur sur un fichier
+    - 8. recherche des evenements dans le fichier log_evt.log pour un utilisateur
+
+  - #### 2. Action
+    - 1. creation d'un compte local
+    - 2. changer le mot de passe d'un compte
+    - 3. supression d'un compte utilisateur
+    - 4. desactivation d'un compte utilisateur local
+    - 5. ajout a un groupe d'administration
+    - 6. ajout a un groupe local
+    - 7. sortie d'un groupe local
+
+- ### 2. Cible Ordinateur
+  - #### 1. Information
+    - 1. version de l'OS
+    - 2. Nombre de disque
+    - 3. partition(nombres,nom,FS,taille)
+    - 4. Espace disque restant sur par partitions
+    - 5. nom et espace disque d'un dossier(nom de dossier demandé)
+    - 6. liste des lecteurs monté (disque,CD,etc...)
+    - 7. liste des apllications/paquets installées
+    - 8. liste des services en cours d'execution
+    - 9. liste des utilisateurs locaux
+    - 10. memoire RAM total
+    - 11. Utilisation de la RAM
+    - 12. recherche des evenements dans le fichier log_evt.log pour la machine
+
+  - #### 2. Action
+    - 1. arret
+    - 2. redemarage
+    - 3. Verouilage
+    - 4. Mise a jour du systeme
+    - 5. creation de repertoire
+    - 6. modification de repertoire
+    - 7. supression d'un repertoire
+    - 8. prise de main a distance
+    - 9. activation du par-feu
+    - 10. desactivation du par-feu
+    - 11. instalation de logiciel
+    - 12. desinstalation de logiciel
+    - 13. Execution de script sur la machine distante
