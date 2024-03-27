@@ -38,7 +38,7 @@ Environement imposé par le client :
 
 ### Difficultés rencontrées : problèmes techniques rencontrés
 
-PowerShell's SUCK !
+PowerShell's SUCKS !
 
 ### Solutions trouvées : Solutions et alternatives trouvées
 
