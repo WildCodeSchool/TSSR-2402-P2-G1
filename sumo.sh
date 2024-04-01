@@ -1,5 +1,5 @@
 #!/bin/bash
-# test branche
+# Branche Nico
 # 1er menu
 
 # 1-choix de cibler un utilisateur avec son nom complet ou partiel 
@@ -40,7 +40,7 @@ sudo userdel -G $grp_del $user &>/dev/null
 # 1-date de derniere connexion d'un utilisateur
 lastlog -u $user
 # 2-date de la derniere modification du mot de passe
-sudo chage -l $user | grep "Last password change"
+sudo change -l $user | grep "Last password change"
 # 3-liste des sessions ouvertes par l'utilisateur
 grep "session opened" /var/log/auth.log | grep "$user"
 # 4-a quelle groupe apartient l'utilisateur
