@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function menu() {
-    echo "Bonjour, bienvenue dans Sumo, comment puis-je vous aider ?"
+    echo -e "\e[32mBonjour, bienvenue dans Sumo, comment puis-je vous aider ?\e[0m"
     local options=(    
         "Je veux cibler un utilisateur."
         "Je veux cibler un ordinateur."
@@ -21,7 +21,7 @@ function menu() {
                     break
                     ;;
                 3) # Sortie du script
-                    echo "Sumo vous remercie d'avoir fait appel a ses services."
+                    echo -e "\e[32mSumo vous remercie d'avoir fait appel a ses services.\e[0m"
                     break 2
                     ;;
                 *) # Pour tout les autres choix
@@ -34,7 +34,7 @@ function menu() {
 } 
 
 function menu:user() {
-    echo "Menu utilisateur, que souhaitez-vous faire ?"
+    echo -e "\e[32mMenu utilisateur, que souhaitez-vous faire ?\e[0m"
     local options=(
         "Je veux des information."
         "Je veux effectuer une action."
@@ -55,7 +55,7 @@ function menu:user() {
                     ;;
                 3) #Retour menu précédent
                     echo "Back to the futur"
-                    echo "Menu utilisateur, que souhaitez-vous faire ?"
+                    echo -e "\e[32mBonjour, bienvenue dans Sumo, comment puis-je vous aider ?\e[0m"
                     break 2
                     ;;
                 *) # Pour tout les autres choix
@@ -68,7 +68,7 @@ function menu:user() {
 }
 
 function menu:user:info() {
-    echo "Menu informartion de l'utilisateur, que souhaitez-vous faire ?"
+    echo -e "\e[32mMenu informartion de l'utilisateur, que souhaitez-vous faire ?\e[0m"
     local options=(
         "Date de dernière connexion"
         "Date de la dernière modification du mot de passe"
@@ -119,7 +119,7 @@ function menu:user:info() {
                     ;;
                 9) #Retour menu précédent
                     echo "Back to the futur"
-                    echo "Menu de l'utilisateur, que souhaitez-vous faire ?"
+                    echo -e "\e[32mMenu utilisateur, que souhaitez-vous faire ?\e[0m"
                     break 2
                     ;;
                 *) # Pour tout les autres choix
@@ -132,7 +132,7 @@ function menu:user:info() {
 }
 
 function menu:user:action() {
-    echo "Menu action de l'utilisateur, que souhaitez-vous faire ?"
+    echo -e "\e[32mMenu action de l'utilisateur, que souhaitez-vous faire ?\e[0m"
     local options=(
         "Changer le mot de passe d'un compte"
         "Suppression d'un compte utilisateur"
@@ -173,7 +173,7 @@ function menu:user:action() {
                     ;;
                 7) #Retour menu précédent
                     echo "Back to the futur"
-                    echo "Menu de l'utilisateur, que souhaitez-vous faire ?"
+                    echo -e "\e[32mMenu utilisateur, que souhaitez-vous faire ?\e[0m"
                     break 2
                     ;;
                 *) # Pour tout les autres choix
@@ -184,5 +184,217 @@ function menu:user:action() {
         done
     done
 }
+
+function menu:computer() {
+    echo -e "\e[32mMenu ordinateur, que souhaitez-vous faire ?\e[0m"
+    local options=(
+        "Je veux des information."
+        "Je veux effectuer une action."
+        "Je veux retourner au menu précédent."
+    )
+    local PS3='Entrez le numéro souhaité: '
+
+    while true; do
+        select opt in "${options[@]}"; do
+            case $REPLY in
+                1) #Information ordinateur
+                    menu:computer:info
+                    break
+                    ;;
+                2) #Action ordinateur
+                    menu:computer:action
+                    break
+                    ;;
+                3) #Retour menu précédent
+                    echo "Back to the futur"
+                    echo -e "\e[32mBonjour, bienvenue dans Sumo, comment puis-je vous aider ?\e[0m"
+                    break 2
+                    ;;
+                *) # Pour tout les autres choix
+                    echo "Ce choix n'est pas disponible, merci de saisir 1, 2 ou 3."
+                    break
+                    ;;
+            esac
+        done
+    done
+}
+
+function menu:computer:info() {
+    echo -e "\e[32mMenu information de l'ordinateur, que souhaitez-vous faire ?\e[0m"
+    local options=(
+        "Version de l'OS"
+        "Nombre de disque"
+        "Partition(nombres,nom,FS,taille)"
+        "Espace disque restant sur par partitions"
+        "Nom et espace disque d'un dossier(nom de dossier demandé)"
+        "Liste des lecteurs monté (disque,CD,etc...)"
+        "Liste des applications/paquets installées"
+        "Liste des services en cours d'execution"
+        "Liste des utilisateurs locaux"
+        "Memoire RAM total"
+        "Utilisation de la RAM"
+        "Recherche des événements dans le fichier log_evt.log pour la machine"
+        "Retour au menu précédent"
+    )
+    local PS3='Entrez le numéro souhaité: '
+
+    while true; do
+        select opt in "${options[@]}"; do
+            case $REPLY in
+                1) #Fonction version de l'OS
+                    echo "TODO ajout de la fonction version de l'OS"
+                    break
+                    ;;
+                2) #Fonction nombre de disque
+                    echo "TODO ajout de la fonction nombre de disque"
+                    break
+                    ;;
+                3) #Fonction partition
+                    echo "TODO ajout de la fonction partition"
+                    break
+                    ;;
+                4) #Fonction espace disque restant par partitions
+                    echo "TODO ajout de la fonction espace disque restant par partitions"
+                    break
+                    ;;
+                5) #Fonction nom et espace disque d'un dossier
+                    echo "TODO ajout de la fonction nom et espace disque d'un dossier"
+                    break
+                    ;;
+                6) #Fonction liste des lecteurs monté
+                    echo "TODO ajout de la fonction liste des lecteurs monté"
+                    break
+                    ;;
+                7) #Fonction liste des applications/paquets installées
+                    echo "TODO ajout de la fonction liste des applications/paquets installées"
+                    break
+                    ;;
+                8) #Fonction liste des services en cours d'execution
+                    echo "TODO ajout de la fonction liste des services en cours d'execution"
+                    break
+                    ;;
+                9) #Fonction liste des utilisateurs locaux
+                    echo "TODO ajout de la fonction liste des utilisateurs locaux"
+                    break
+                    ;;
+                10) #Fonction memoire RAM total
+                    echo "TODO ajout de la fonction memoire RAM total"
+                    break
+                    ;;
+                11) #Fonction utilisation de la RAM
+                    echo "TODO ajout de la fonction utilisation de la RAM"
+                    break
+                    ;;
+                12) #Fonction recherche des événements dans le fichier log_evt.log
+                    echo "TODO ajout de la fonction recherche des événements dans le fichier log_evt.log"
+                    break
+                    ;;
+                13) #Retour menu précédent
+                    echo "Back to the futur"
+                    echo -e "\e[32mMenu ordinateur, que souhaitez-vous faire ?\e[0m"
+                    break 2
+                    ;;
+                *) # Pour tout les autres choix
+                    echo "Ce choix n'est pas disponible, merci de saisir un nombre entre 1 et 13."
+                    break;;
+            esac
+        done
+    done
+}
+
+function menu:computer:action() {
+    echo -e "\e[32mMenu action de l'ordinateur, que souhaitez-vous faire ?\e[0m"
+    local options=(
+        "Création d'un compte local"
+        "Arrêt"
+        "Redémarrage"
+        "Verrouillage"
+        "Mise a jour du système"
+        "Creation de repertoire"
+        "Modification de repertoire"
+        "Suppression d'un repertoire"
+        "Prise de main a distance"
+        "Activation du par-feu"
+        "Désactivation du par-feu"
+        "Installation de logiciel"
+        "Désinstallation de logiciel"
+        "Execution de script sur la machine distante"
+        "Retour au menu précédent"
+    )
+    local PS3='Entrez le numéro souhaité: '
+
+    while true; do
+        select opt in "${options[@]}"; do
+            case $REPLY in
+                1) #Fonction Création d'un compte local
+                    echo "TODO ajout de la fonction Création d'un compte local"
+                    break
+                    ;;
+                2) #Fonction Arrêt
+                    echo "TODO ajout de la fonction Arrêt"
+                    break
+                    ;;
+                3) #Fonction Redémarrage
+                    echo "TODO ajout de la fonction Redémarrage"
+                    break
+                    ;;
+                4) #Fonction Verrouillage
+                    echo "TODO ajout de la fonction Verrouillage"
+                    break
+                    ;;
+                5) #Fonction Mise a jour du système
+                    echo "TODO ajout de la fonction Mise a jour du système"
+                    break
+                    ;;
+                6) #Fonction Creation de repertoire
+                    echo "TODO ajout de la fonction Creation de repertoire"
+                    break
+                    ;;
+                7) #Fonction Modification de repertoire
+                    echo "TODO ajout de la fonction Modification de repertoire"
+                    break
+                    ;;
+                8) #Fonction Suppression d'un repertoire
+                    echo "TODO ajout de la fonction Suppression d'un repertoire"
+                    break
+                    ;;
+                9) #Fonction Prise de main a distance
+                    echo "TODO ajout de la fonction Prise de main a distance"
+                    break
+                    ;;
+                10) #Fonction Activation du par-feu
+                    echo "TODO ajout de la fonction Activation du par-feu"
+                    break
+                    ;;
+                11) #Fonction Désactivation du par-feu
+                    echo "TODO ajout de la fonction Désactivation du par-feu"
+                    break
+                    ;;
+                12) #Fonction Installation de logiciel
+                    echo "TODO ajout de la fonction Installation de logiciel"
+                    break
+                    ;;
+                13) #Fonction Désinstallation de logiciel
+                    echo "TODO ajout de la fonction Désinstallation de logiciel"
+                    break
+                    ;;
+                14) #Fonction Execution de script sur la machine distante
+                    echo "TODO ajout de la fonction Execution de script sur la machine distante"
+                    break
+                    ;;
+                15) #Retour menu précédent
+                    echo "Back to the futur"
+                    echo -e "\e[32mMenu ordinateur, que souhaitez-vous faire ?\e[0m"
+                    break 2
+                    ;;
+                *) # Pour tout les autres choix
+                    echo "Ce choix n'est pas disponible, merci de saisir un nombre entre 1 et 15."
+                    break
+                    ;;
+            esac
+        done
+    done
+}
+    
 
 menu
