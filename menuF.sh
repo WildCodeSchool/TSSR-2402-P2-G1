@@ -1,20 +1,18 @@
 #!/bin/bash
 
+
+
 function menu() {
     echo -e "\e[32mBonjour, bienvenue dans Sumo, comment puis-je vous aider ?\e[0m"
     echo " "
-    local options=("-------------"  
-        "| 1) Je veux cibler un utilisateur.  |"
-        "| 2) Je veux cibler un ordinateur.   |"
-        "| 3) Je veux sortir du script.       |"
-        "---------------"
-    )
+    local options=( 
+        "Je veux cibler un utilisateur."
+        "Je veux cibler un ordinateur."
+        "Je veux sortir du script."
+        )
     local PS3='Entrez le numéro souhaité: '
-for option in "${options[@]}"; do
-    echo "$option"
-    done
-    while true; do
 
+    while true; do
         select opt in "${options[@]}"; do 
             case $REPLY in
                 1) # Cibler un utilisateur
@@ -27,6 +25,7 @@ for option in "${options[@]}"; do
                     ;;
                 3) # Sortie du script
                     echo -e "\e[32mSumo vous remercie d'avoir fait appel a ses services.\e[0m"
+                    echo " "
                     break 2
                     ;;
                 *) # Pour tout les autres choix

@@ -24,6 +24,35 @@ Depuis un serveur, cibler une machine cliente avec un type d’OS différent.
 |  Nicolas Claverie  |    Membre     | Installation et config réseau vm Windows Server / Doc |
 |   Pierre Girard    | Product Owner |                 Squelette/pseudo-code                 |
 
+***Semaine 2:***  
+
+|        Nom         |     Rôles     |       Tâche       |
+| :----------------: | :-----------: | :---------------: |
+|  Ahmed Ben Rebai   | Scrum Master  |    Codage Bash    |
+| Alexandre Peyronie |    Membre     | Heureux événement |
+|    Luca Pouilly    |    Membre     |    Codage Bash    |
+|  Nicolas Claverie  | Product Owner |    Codage Bash    |
+|   Pierre Girard    |    Membre     |    Codage Bash    |
+
+***Semaine 3:***  
+
+|        Nom         | Rôles | Tâche |
+| :----------------: | :---: | :---: |
+|  Ahmed Ben Rebai   |       |       |
+| Alexandre Peyronie |       |       |
+|    Luca Pouilly    |       |       |
+|  Nicolas Claverie  |       |       |
+|   Pierre Girard    |       |       |
+
+***Semaine 4:***
+
+|        Nom         | Rôles | Tâche |
+| :----------------: | :---: | :---: |
+|  Ahmed Ben Rebai   |       |       |
+| Alexandre Peyronie |       |       |
+|    Luca Pouilly    |       |       |
+|  Nicolas Claverie  |       |       |
+|   Pierre Girard    |       |       |
 
 ### Choix techniques 
 
@@ -38,9 +67,22 @@ Environment imposé par le client :
 
 ### Difficultés rencontrées : problèmes techniques rencontrés
 
+#### Semaine 1
+
+Aucune difficulté
+
+#### Semaine 2
+
+1)  Acceder a une machine distante en `SSH` puis executer une commande par la suite.
+
 PowerShell's SUCKS !
 
 ### Solutions trouvées : Solutions et alternatives trouvées
+
+#### Semaine 2
+
+1) ```ssh -t $1@$2 $3```  
+   L'argument `-t` permet de demander le mot de passe pour la connexion ssh et autorise donc l'execution d'une commande sur une machine distante.
 
 BURN PowerShell BURN !
 
