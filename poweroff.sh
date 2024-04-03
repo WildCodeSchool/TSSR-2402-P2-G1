@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fonction pour arrêter un ordinateur client
-arreter_client() {
+function arreter_client() {
     # Adresse IP ou nom d'hôte de l'ordinateur client
     client_address="adresse_ip_ou_nom_hote"
 
