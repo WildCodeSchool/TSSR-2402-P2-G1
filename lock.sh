@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fonction pour verrouiller un ordinateur client
-verrouiller_client() {
+function verrouiller_client() {
     # Adresse IP ou nom d'hôte de l'ordinateur client
     client_address="adresse_ip_ou_nom_hote"
 
