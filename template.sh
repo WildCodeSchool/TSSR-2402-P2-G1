@@ -14,8 +14,8 @@ function update_system()
     call_ssh $1 $2 "sudo apt update && sudo apt upgrade -y"
 }
 
-read -p "quelle ordianteur voulez vous cibler? " choix_ordinateur
-read -p "quelle utilisateur voulez vous cibler? " choxi_user
+read -p "quelle ordinateur voulez vous cibler? " choix_ordinateur
+read -p "quelle utilisateur voulez vous cibler? " choix_user
 
-#apelle de la fonction updaate_system
+#apelle de la fonction update_system
 update_system $choix_user $choix_ordinateur 
