@@ -9,7 +9,7 @@ function verrouiller_client() {
     username="utilisateur"
 
     # Utilisation de la commande ssh pour se connecter à l'ordinateur client et verrouiller l'écran
-    ssh "$username@$client_address" "xlock"
+    ssh "$ssh wilder@172.16.10.30" "xlock"
 }
 
 # Appel de la fonction pour verrouiller l'ordinateur client
