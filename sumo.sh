@@ -516,6 +516,7 @@ Menu ordinateur, que souhaitez-vous faire ?
 #####################################################
 
 function osVer() {
+    echo "Version de l'OS:" >> $file_log
     call_ssh $user_choice $computer_choice "lsb_release -a" && call_ssh $user_choice $computer_choice "lsb_release -a" >> $file_log
 }
 
@@ -680,11 +681,11 @@ Menu action de l'ordinateur, que souhaitez-vous faire ?
                     break
                     ;;
                 10) #Fonction Activation du par-feu
-                    echo "TODO ajout de la fonction Activation du par-feu"
+                    fw_ena
                     break
                     ;;
                 11) #Fonction Désactivation du par-feu
-                    echo "TODO ajout de la fonction Désactivation du par-feu"
+                    fw_disa
                     break
                     ;;
                 12) #Fonction Installation de logiciel
@@ -791,11 +792,13 @@ function update_system()
 
 #####################################################
 # Fonction Activation du par-feu
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-
+function fw_ena() {
+    call_ssh $user_choice $computer_choice "sudo ufw enable"
+} 
 
 #####################################################
 # Fonction Désactivation du par-feu
@@ -803,7 +806,9 @@ function update_system()
 # 
 #####################################################
 
-
+function fw_disa() {
+    call_ssh $user_choice $computer_choice "sudo ufw disable"
+}
 
 #####################################################
 # Fonction Installation de logiciel
