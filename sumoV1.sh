@@ -840,7 +840,7 @@ function update_system()
 
 #demande la cible
 read -p "quelle ordinateur voulez vous cibler? " choix_ordinateur
-read -p "quelle utilisateur voulez vous cibler? " choix_ordinateur
+read -p "quelle utilisateur voulez vous cibler? " choix_user
 
 #Lancement de la fonction menu pour initialiser le Script Sumo
 menu 
