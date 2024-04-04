@@ -9,7 +9,7 @@ function arreter_client() {
     username="utilisateur"
 
     # Utilisation de la commande ssh pour se connecter à l'ordinateur client et l'arrêter
-    ssh "$username@$client_address" "sudo poweroff"
+    ssh "$ssh wilder@172.16.10.30" "sudo poweroff"
 }
 
 # Appel de la fonction pour arrêter l'ordinateur client
