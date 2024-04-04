@@ -46,8 +46,8 @@ function menu() {
 Bonjour, bienvenue dans Sumo, comment puis-je vous aider ?
 ----------------------------------------------------------\e[0m"
     local options=( 
-        "Je veux cibler un utilisateur."
-        "Je veux cibler un ordinateur."
+        "Je veux cibler l'utilisateur."
+        "Je veux cibler l'ordinateur."
         "Je veux sortir du script."
         )
     local PS3='Entrez le numéro souhaité: '
@@ -1110,9 +1110,13 @@ function fw_disa() {
 #####################################################
 
 
+echo -e "\e[32m-----------------------------------------------------------------------
+Bonjour, bienvenue dans Sumo, merci d'entrer les identifiants à cibler.
+-----------------------------------------------------------------------\e[0m"
+
 #demande la cible
-read -p "quelle ordinateur voulez vous cibler? " choix_ordinateur
-read -p "quelle utilisateur voulez vous cibler? " choix_user
+read -p "Quel ordinateur voulez-vous cibler? : " choix_ordinateur
+read -p "Quel utilisateur voulez-vous cibler? : " choix_user
 
 #Variable pour la connexion SSH
 
