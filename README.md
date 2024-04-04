@@ -75,6 +75,10 @@ Aucune difficulté
 
 1)  Acceder a une machine distante en `SSH` puis executer une commande par la suite.
 
+2)  Impossible d'enregistrer les fichiers log.
+  
+
+
 PowerShell's SUCKS !
 
 ### Solutions trouvées : Solutions et alternatives trouvées
@@ -86,6 +90,9 @@ PowerShell's SUCKS !
 1) ```ssh -t $1@$2 $3```  
    L'argument `-t` permet de demander le mot de passe pour la connexion ssh et autorise donc l'execution d'une commande sur une machine distante.
 
+2) D'abord créer un dossier `Documents` sur le `root` de debian.
+   
+   
 #### Semaine 3
 
 
