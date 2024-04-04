@@ -235,7 +235,7 @@ Menu informartion de l'utilisateur, que souhaitez-vous faire ?
 
 function last_cmd() {
     echo "Liste des dernieres commandes passé par l'utilisateur $user_choice" >> $file_log
-    ssh $choix_user@$choix_ordinateur "cat ~/.bash_history" && ssh $choix_user@$choix_ordinateur "cat ~/.bash_history" >> $file_log
+    $sshtarget "cat ~/.bash_history" && $sshtarget "cat ~/.bash_history" >> $file_log
 }
 
 #####################################################
@@ -520,7 +520,7 @@ Menu ordinateur, que souhaitez-vous faire ?
 
 function osVer() {
     echo "Version de l'OS:" >> $file_log
-    ssh $choix_user@$choix_ordinateur "lsb_release -a" && ssh $choix_user@$choix_ordinateur "lsb_release -a" >> $file_log
+    $sshtarget "lsb_release -a" && $sshtarget "lsb_release -a" >> $file_log
 }
 
 #####################################################
@@ -531,7 +531,7 @@ function osVer() {
 
 function nbDsk() {
     echo "Nombre de disque:" >> $file_log
-    ssh $choix_user@$choix_ordinateur "lsblk | grep disk | wc -l" && ssh $choix_user@$choix_ordinateur "lsblk | grep disk | wc -l" >> $file_log
+    $sshtarget "lsblk | grep disk | wc -l" && $sshtarget "lsblk | grep disk | wc -l" >> $file_log
 
 }
 
@@ -596,30 +596,40 @@ function nbDsk() {
 # Auteur : pierre 
 # 
 #####################################################
-function ram_total()
-{
-call_ssh_EOF $1 $2 <<-"EOF"
-    ram=$(free)
-    ram=$(echo $ram | cut -d' ' -f8)
-    echo $ram
-EOF
+
+function ram_total() {
+    echo "RAM Totale présente sur le poste:" >> $file_log
+    $sshtarget "free -h | grep 'Mem' | awk '{print $2}'" && $sshtarget "free -h | grep 'Mem' | awk '{print $2}'" >> $file_log
 }
+#function ram_total()
+#{
+#call_ssh_EOF $1 $2 <<-"EOF"
+#    ram=$(free)
+#    ram=$(echo $ram | cut -d' ' -f8)
+#    echo $ram
+#EOF
+#}
 
 
 #####################################################
 # Fonction Utilisation de la RAM
-# Auteur :pierre
+# Auteur :pierre 
 # 
 #####################################################
 
-function ram_use()
-{
-call_ssh_EOF $1 $2 <<-"EOF"
-        ram=$(free)
-        ram=$(echo $ram | cut -d' ' -f9)
-        echo $ram
-EOF
+function ram_use() {
+echo "RAM utilisé sur le poste:" >> $file_log
+$sshtarget "free -h | grep 'Mem' | awk '{print $3}'" && $sshtarget "free -h | grep 'Mem' | awk '{print $3}'" >> $file_log
+
 }
+#function ram_use()
+#{
+#call_ssh_EOF $1 $2 <<-"EOF"
+#        ram=$(free)
+#        ram=$(echo $ram | cut -d' ' -f9)
+#        echo $ram
+#EOF
+#}
 
 
 #####################################################
@@ -816,7 +826,7 @@ function update_system()
 #####################################################
 
 function fw_ena() {
-    ssh $choix_user@$choix_ordinateur "sudo ufw enable"
+    $sshtarget "sudo ufw enable"
 } 
 
 #####################################################
@@ -826,9 +836,8 @@ function fw_ena() {
 #####################################################
 
 function fw_disa() {
-    ssh $choix_user@$choix_ordinateur "sudo ufw disable"
+    $sshtarget "sudo ufw disable"
 }
-
 
 #####################################################
 # Fonction Installation de logiciel
@@ -857,8 +866,12 @@ function fw_disa() {
 read -p "quelle ordinateur voulez vous cibler? " choix_ordinateur
 read -p "quelle utilisateur voulez vous cibler? " choix_user
 
+#Variable pour la connexion SSH
+
+sshtarget="ssh -t $choix_user@$choix_ordinateur"
+
 # Variable nom de fichier pour log d'information
-file_log=$HOME/Documents/"Info-$computer_choice-$(date +'%Y%m%d').txt"
+file_log=$HOME/Documents/"Info-$choix_ordinateur-$(date +'%Y%m%d').txt"
 
 #Lancement de la fonction menu pour initialiser le Script Sumo
 menu 
