@@ -29,6 +29,15 @@ function ram_total()
     EOF
 }
 
+function ram_use()
+{
+    call_ssh_EOF $1 $2 <<-"EOF"
+    ram=$(free)
+    ram=$(echo $ram | cut -d' ' -f9)
+    echo $ram
+    EOF
+}
+
 read -p "quelle ordinateur voulez vous cibler? " choix_ordinateur
 read -p "quelle utilisateur voulez vous cibler? " choix_user
 
