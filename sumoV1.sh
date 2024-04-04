@@ -287,27 +287,27 @@ Menu action de l'utilisateur, que souhaitez-vous faire ?
         select opt in "${options[@]}"; do
             case $REPLY in
                 1) #Fonction changer le mot de passe d'un compte
-                    echo "TODO ajout de la fonction changer le mot de passe d'un compte"
+                    change_pswd
                     break
                     ;;
                 2) #Fonction suppression d'un compte utilisateur
-                    echo "TODO ajout de la fonction suppression d'un compte utilisateur"
+                    del_user
                     break
                     ;;
                 3) # Fonction désactivation d'un compte utilisateur local
-                    echo "TODO ajout de la fonction désactivation d'un compte utilisateur local"
+                    shut_user
                     break
                     ;;
                 4) # Fonction ajout a un groupe d'administration
-                    echo "TODO ajout de la fonction ajout a un groupe d'administration"
+                    admin_grp
                     break
                     ;;
                 5) # Fonction ajout a un groupe local
-                    echo "TODO ajout de la fonction ajout a un groupe local"
+                    add_grp
                     break
                     ;;
                 6) # Fonction sortie d'un groupe local
-                    echo "TODO ajout de la fonction sortie d'un groupe local"
+                    del_grp
                     break
                     ;;
                 7) #Retour menu précédent
@@ -328,51 +328,249 @@ Menu action de l'utilisateur, que souhaitez-vous faire ?
 
 #####################################################
 # Fonction Changer le mot de passe d'un compte
-# Auteur : 
+# Auteur : Luca
 # 
 #####################################################
 
-
+change_pswd() {
+        
+while true; do
+        
+        #demande sur quel utilisateur effectuer la modification de mot de passe
+        
+        #verifie si l'utilisateur existe
+        if $sshtarget id "$user_pswd" &>/dev/null; then
+        $sshtarget sudo passwd $user_pswd
+        break
+        
+        else
+        echo "L'utilisateur $user_pswd n'existe pas"
+        
+        fi
+        
+done
+}    
 
 #####################################################
 # Fonction Suppression d'un compte utilisateur
-# Auteur : 
+# Auteur : Luca
 # 
 #####################################################
 
+del_user() {
 
+    while true; do
+        #demande quel utilisateur supprimer"
+        read -p "Indiquer le nom de l'utilisateur a supprimer : " user_del
+
+        #vérifie l'existance de l'utilisateur si oui demande la confirmation de suppression
+        if $sshtarget id "$user_del" &>/dev/null; then
+            read -p "Voulez-vous supprimer l'utilisateur $user_del ? o/n : " verif_del
+        
+                #si la réponse est "o" supprime l'utilisteur
+                if [[ $verif_del = "o" ]]; then
+                $sshtarget sudo userdel $user_del
+
+                    #verifie si l'utilisateur a bien été supprimer
+                    if $sshtarget id "$user_del" &>/dev/null; then
+                    echo "Erreur l'utilisateur n'a pas été supprimé"
+                    
+                    else
+                    echo "L'utilisateur $user_del a bien été supprimé"
+                
+                    fi
+                    break            
+                #si la réponse est "n" affiche un message
+                else
+                echo "Suppression annulé"
+                
+                fi
+
+        else
+        echo "l'utilisateur $user_del n'existe pas" 
+
+        fi
+    
+    done
+
+}  
 
 #####################################################
 # Fonction Désactivation d'un compte utilisateur local
-# Auteur : 
+# Auteur : Luca
 # 
 #####################################################
 
+shut_user() {
 
+
+    while true; do
+
+        #demande quel utilisateur désactiver"
+        read -p "Indiquer le nom de l'utilisateur a désactiver : " user_shut
+
+        #vérifie l'existance de l'utilisateur si oui demande la confirmation de desactivation
+        if $sshtarget id "$user_shut" &>/dev/null; then
+        read -p "Voulez-vous désactiver l'utilisateur $user_shut ? o/n : " verif_shut
+        
+                #si la réponse est "o" désactive le compte de l'utilisteur
+                if [[ $verif_shut = "o" ]]; then
+                $sshtarget sudo usermod --expiredate 1 $user_shut &>/dev/null
+
+                    #vérifie si l'utilisateur a bien été désactiver
+                    if [ "$?" == 0 ]; then
+                    echo "L'utilisateur a bien été supprimé"
+                    break
+
+                    fi
+                #si la réponse est "n" affiche un message
+                else
+                echo "Suppression annulé"
+
+                fi
+
+        else
+        echo "L'utilisateur n'existe pas"
+    
+        fi
+
+    done
+
+}  
 
 #####################################################
 # Fonction Ajout a un groupe d'administration
-# Auteur : 
+# Auteur : Luca
 # 
 #####################################################
 
+admin_grp() {
 
+while true; do
+
+    # demander quel utilisateur ajouter"
+    read -p "Quel utlisateur voulez-vous ajouter au groupe administration ? : " grp_admin
+        #verifie l'existance de l'utilisateur
+        if $sshtarget id "$grp_admin" &>/dev/null; then
+
+            #si oui demande confirtmation d'ajout au groupe sudo
+            read -p "Voulez-vous ajouter $grp_admin au groupe sudo ? o/n :" verif_admin
+
+                #si oui ajoute au groupe sudo
+                if [[ $verif_admin == "o" ]]; then
+                    $sshtarget sudo usermod -aG sudo "$grp_admin" &>/dev/null
+
+                        #verifie si le l'utilisateur a bien été integré au groupe sudo
+                        if $sshtarget id $grp_admin | grep -qw 'sudo'; then
+                            #si oui affiche l'utilisateur a été ajouté avec succes
+                            echo "l'utilisateur a été ajouter avec succes"
+                            break
+                        else
+                            echo "L'ajout de l'utilisateur au groupe administration a échoué"
+
+                        fi
+                    #si non affiche annulation d'ajout au groupe administrateur
+                else
+                    echo "Ajout au groupe administration annulé"
+                    
+                fi
+        else
+            echo "L'utilisateur $grp_admin n'existe pas"
+        fi
+done
+}
 
 #####################################################
 # Fonction Ajout a un groupe local
-# Auteur : 
+# Auteur : Luca
 # 
 #####################################################
 
+function add_grp() {
+
+    while true; do
+        
+        # Demande quel utilisateur doit être ajouté à un groupe
+        read -p "Quel utilisateur souhaitez-vous ajouter à un groupe ? : " grp_add 
+        
+        # Vérifie si l'utilisateur saisi existe
+        if $sshtarget id "$grp_add" &>/dev/null; then
+            # Si l'utilisateur existe, demande à quel groupe il doit être ajouté
+            read -p "À quel groupe souhaitez-vous ajouter $grp_add ? : " grp_name
+            
+            # Vérifie si le groupe demandé existe
+            if $sshtarget getent group "$grp_name" &>/dev/null; then 
+                # Si oui, ajoute l'utilisateur au groupe
+                $sshtarget sudo usermod -aG "$grp_name" "$grp_add"
+                
+                # Vérifie si l'utilisateur a bien été ajouté au groupe
+                if $sshtarget id -nG "$grp_add" | grep -qw "$grp_name"; then
+                    # Si oui, affiche un message de validation
+                    echo "L'utilisateur $grp_add a bien été ajouté au groupe $grp_name."
+                    exit 0
+                else
+                    # Si non, affiche un message d'erreur
+                    echo "Erreur lors de l'ajout de l'utilisateur au groupe $grp_name."
+                fi 
+            else
+                echo "Le groupe indiqué n'existe pas."
+            fi
+        else
+            echo "L'utilisateur indiqué n'existe pas."
+        fi
+    done            
+}       
 
 
 #####################################################
 # Fonction Sortie d'un groupe local
-# Auteur : 
+# Auteur : Luca
 # 
 #####################################################
 
+function del_grp() {
 
+    while true; do
+        
+        # Demande quel utilisateur doit être supprimer d'un groupe
+        read -p "Quel utilisateur souhaitez-vous supprimer d'un groupe ? : " grp_del 
+        
+        # Vérifie si l'utilisateur saisi existe
+        if $sshtarget id "$grp_del" &>/dev/null; then
+            # Si l'utilisateur existe, demande à quel groupe il doit être supprimer
+            read -p "De quel groupe souhaitez-vous supprimer $grp_del ? : " grp_verif
+            
+            # Vérifie si le groupe demandé existe
+            if $sshtarget getent group "$grp_verif" &>/dev/null; then
+                
+                #verifi si l'utilisateur est dans le groupe demander
+                if $sshtarget id -nG "$grp_del" | grep -qw "$grp_verif" &>/dev/null; then
+                    
+                    # Si oui, supprime l'utilisateur du groupe
+                    $sshtarget sudo gpasswd -d "$grp_del" "$grp_verif" &>/dev/null
+                    
+                    # Vérifie si l'utilisateur a bien été supprimer du groupe
+                    if $sshtarget ! id -nG "$grp_del" | grep -qw "$grp_verif" &>/dev/null; then
+                        
+                        # Si oui, affiche un message de validation
+                        echo "L'utilisateur $grp_del a bien été supprimé du groupe $grp_verif."
+                        break
+                    else
+                        # Si non, affiche un message d'erreur
+                        echo "Erreur lors de la suppression du groupe $grp_verif."
+                    fi 
+                    
+                else
+                echo "L'utilisateur ne fait pas partie de ce groupe"
+                fi
+            else
+                echo "Le groupe indiqué n'existe pas."
+            fi
+        else
+            echo "L'utilisateur indiqué n'existe pas."
+        fi
+    done            
+}    
 
 #######################################
 # Affiche le sous-menu ordinateur.
@@ -532,7 +730,6 @@ function osVer() {
 function nbDsk() {
     echo "Nombre de disque:" >> $file_log
     $sshtarget "lsblk | grep disk | wc -l" && $sshtarget "lsblk | grep disk | wc -l" >> $file_log
-
 }
 
 #####################################################
@@ -599,7 +796,7 @@ function nbDsk() {
 
 function ram_total() {
     echo "RAM Totale présente sur le poste:" >> $file_log
-    $sshtarget "free -h | grep 'Mem' | awk '{print $2}'" && $sshtarget "free -h | grep 'Mem' | awk '{print $2}'" >> $file_log
+    $sshtarget free -h | grep 'Mem' | awk '{print $2}' && $sshtarget free -h | grep 'Mem' | awk '{print $2}' >> $file_log
 }
 #function ram_total()
 #{
@@ -619,7 +816,7 @@ function ram_total() {
 
 function ram_use() {
 echo "RAM utilisé sur le poste:" >> $file_log
-$sshtarget "free -h | grep 'Mem' | awk '{print $3}'" && $sshtarget "free -h | grep 'Mem' | awk '{print $3}'" >> $file_log
+$sshtarget free -h | grep 'Mem' | awk '{print $3}' && $sshtarget free -h | grep 'Mem' | awk '{print $3}' >> $file_log
 
 }
 #function ram_use()
@@ -673,19 +870,19 @@ Menu action de l'ordinateur, que souhaitez-vous faire ?
         select opt in "${options[@]}"; do
             case $REPLY in
                 1) #Fonction Création d'un compte local
-                    echo "TODO ajout de la fonction Création d'un compte local"
+                    add_user
                     break
                     ;;
                 2) #Fonction Arrêt
-                    echo "TODO ajout de la fonction Arrêt"
+                    arreter_client
                     break
                     ;;
                 3) #Fonction Redémarrage
-                    echo "TODO ajout de la fonction Redémarrage"
+                    redemarrer_client
                     break
                     ;;
                 4) #Fonction Verrouillage
-                    echo "TODO ajout de la fonction Verrouillage"
+                    verrouiller_client
                     break
                     ;;
                 5) #Fonction Mise a jour du système
@@ -746,35 +943,86 @@ Menu ordinateur, que souhaitez-vous faire ?
 
 #####################################################
 # Fonction Création d'un compte local
-# Auteur : 
+# Auteur : Luca
 # 
 #####################################################
 
-
+#fonction d'ajout d'utilisateur
+add_user() {
+    
+    #demande d'ajouter un nom ou plusieurs
+    read -p "indiquer le nom du ou des utilisateurs séparé par un espace" -a noms
+    
+    for nom in "${noms[@]}"; do
+        if $sshtarget id "$nom"&>/dev/null; then
+            echo "l'utilisateur $nom existe déja"
+        else
+            $sshtarget sudo useradd "$nom"
+            
+            if $sshtarget id "$nom"&>/dev/null; then
+                echo "l'utilisateur $nom à bien été crée"
+            else
+                echo "erreur de création de l'utilisateur $nom"
+            
+            fi
+        fi
+    done
+}
 
 #####################################################
 # Fonction Arrêt
-# Auteur : 
+# Auteur : Ahmed
 # 
 #####################################################
 
+function arreter_client() {
+    # Adresse IP ou nom d'hôte de l'ordinateur client
+    client_address="adresse_ip_ou_nom_hote"
 
+    # Nom d'utilisateur sur l'ordinateur client
+    username="utilisateur"
+
+    # Utilisation de la commande ssh pour se connecter à l'ordinateur client et l'arrêter
+    $sshtarget poweroff
+}
 
 #####################################################
 # Fonction Redémarrage
-# Auteur : 
+# Auteur : Ahmed
 # 
 #####################################################
 
+function redemarrer_client() {
+    # Adresse IP ou nom d'hôte de l'ordinateur distant
+    client_address="adresse_ip_ou_nom_hote"
 
+    # Nom d'utilisateur sur l'ordinateur distant
+    username="utilisateur"
+
+    # Utilisation de la commande ssh pour redémarrer l'ordinateur distant
+    $sshtarget reboot
+}
+
+# Appel de la fonction pour redémarrer l'ordinateur distant
 
 #####################################################
 # Fonction Verrouillage
-# Auteur : 
+# Auteur : Ahmed
 # 
 #####################################################
 
+# Fonction pour verrouiller un ordinateur client
+function verrouiller_client() {
+    # Adresse IP ou nom d'hôte de l'ordinateur client
+    client_address="adresse_ip_ou_nom_hote"
 
+    # Nom d'utilisateur sur l'ordinateur client
+    username="utilisateur"
+
+    # Utilisation de la commande ssh pour se connecter à l'ordinateur client et verrouiller l'écran
+    $sshtarget loginctl lock-session
+
+}
 
 #####################################################
 # Fonction Mise a jour du système
