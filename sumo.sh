@@ -450,7 +450,7 @@ Menu information de l'ordinateur, que souhaitez-vous faire ?
                     break
                     ;;
                 2) #Fonction nombre de disque
-                    echo "TODO ajout de la fonction nombre de disque"
+                    nbDsk
                     break
                     ;;
                 3) #Fonction partition
@@ -521,11 +521,15 @@ function osVer() {
 
 #####################################################
 # Fonction Nombre de disque
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
+function nbDsk() {
+    echo "Nombre de disque:" >> $file_log
+    call_ssh "lsblk | grep disk | wc -l" && call_ssh "lsblk | grep disk | wc -l" >> $file_log
 
+}
 
 #####################################################
 # Fonction Partition(nombres,nom,FS,taille)
