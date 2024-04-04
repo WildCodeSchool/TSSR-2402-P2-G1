@@ -527,7 +527,7 @@ function osVer() {
 
 function nbDsk() {
     echo "Nombre de disque:" >> $file_log
-    call_ssh "lsblk | grep disk | wc -l" && call_ssh "lsblk | grep disk | wc -l" >> $file_log
+    call_ssh $user_choice $computer_choice "lsblk | grep disk | wc -l" && call_ssh $user_choice $computer_choice "lsblk | grep disk | wc -l" >> $file_log
 
 }
 
