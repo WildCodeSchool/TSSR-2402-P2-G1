@@ -164,7 +164,7 @@ Menu informartion de l'utilisateur, que souhaitez-vous faire ?
                     break
                     ;;
                 5) #Fonction de la liste des commandes utiliser par l'utilisateur
-                    echo "TODO ajout de la fonction de la liste des commandes utiliser par l'utilisateur"
+                    last_cmd
                     break
                     ;;
                 6) #Fonction des droit et permissions de l'utilisateur sur un dossier
@@ -229,11 +229,14 @@ Menu informartion de l'utilisateur, que souhaitez-vous faire ?
 
 #####################################################
 # Fonction Liste des commandes utiliser par l'utilisateur
-# Auteur : 
+# Auteur : Pierre et Nico
 # 
 #####################################################
 
-
+function last_cmd() {
+    echo "Liste des dernieres commandes passé par l'utilisateur $user_choice" >> $file_log
+    ssh $choix_user@$choix_ordinateur "cat ~/.bash_history" && ssh $choix_user@$choix_ordinateur "cat ~/.bash_history" >> $file_log
+}
 
 #####################################################
 # Fonction Droit et permissions de l'utilisateur sur un dossier
@@ -446,11 +449,11 @@ Menu information de l'ordinateur, que souhaitez-vous faire ?
         select opt in "${options[@]}"; do
             case $REPLY in
                 1) #Fonction version de l'OS
-                    echo "TODO ajout de la fonction version de l'OS"
+                    osVer
                     break
                     ;;
                 2) #Fonction nombre de disque
-                    echo "TODO ajout de la fonction nombre de disque"
+                    nbDsk
                     break
                     ;;
                 3) #Fonction partition
@@ -511,19 +514,26 @@ Menu ordinateur, que souhaitez-vous faire ?
 
 #####################################################
 # Fonction Version de l'OS
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-
+function osVer() {
+    echo "Version de l'OS:" >> $file_log
+    ssh $choix_user@$choix_ordinateur "lsb_release -a" && ssh $choix_user@$choix_ordinateur "lsb_release -a" >> $file_log
+}
 
 #####################################################
 # Fonction Nombre de disque
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
+function nbDsk() {
+    echo "Nombre de disque:" >> $file_log
+    ssh $choix_user@$choix_ordinateur "lsblk | grep disk | wc -l" && ssh $choix_user@$choix_ordinateur "lsblk | grep disk | wc -l" >> $file_log
 
+}
 
 #####################################################
 # Fonction Partition(nombres,nom,FS,taille)
@@ -689,11 +699,11 @@ Menu action de l'ordinateur, que souhaitez-vous faire ?
                     break
                     ;;
                 10) #Fonction Activation du par-feu
-                    echo "TODO ajout de la fonction Activation du par-feu"
+                    fw_ena
                     break
                     ;;
                 11) #Fonction Désactivation du par-feu
-                    echo "TODO ajout de la fonction Désactivation du par-feu"
+                    fw_disa
                     break
                     ;;
                 12) #Fonction Installation de logiciel
@@ -801,18 +811,23 @@ function update_system()
 
 #####################################################
 # Fonction Activation du par-feu
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-
+function fw_ena() {
+    ssh $choix_user@$choix_ordinateur "sudo ufw enable"
+} 
 
 #####################################################
 # Fonction Désactivation du par-feu
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
+function fw_disa() {
+    ssh $choix_user@$choix_ordinateur "sudo ufw disable"
+}
 
 
 #####################################################
@@ -840,7 +855,10 @@ function update_system()
 
 #demande la cible
 read -p "quelle ordinateur voulez vous cibler? " choix_ordinateur
-read -p "quelle utilisateur voulez vous cibler? " choix_ordinateur
+read -p "quelle utilisateur voulez vous cibler? " choix_user
+
+# Variable nom de fichier pour log d'information
+file_log=$HOME/Documents/"Info-$computer_choice-$(date +'%Y%m%d').txt"
 
 #Lancement de la fonction menu pour initialiser le Script Sumo
 menu 
