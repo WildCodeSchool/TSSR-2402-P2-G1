@@ -14,6 +14,26 @@
 #   - Luca Pouilly <luca.pouilly@hotmail.com>
 ####################################################################
 
+#######################################
+# Connexion ssh simple
+# Auteur : pierre
+#   
+#######################################
+
+function call_ssh()
+{
+    ssh -t $1@$2 $3
+}
+#######################################
+# Connexion ssh avec EOF
+# Auteur : pierre
+#   
+#######################################
+
+function call_ssh_EOF()
+{
+    ssh -t $1@$2
+}
 
 #######################################
 # Affiche le menu principal.
@@ -462,11 +482,11 @@ Menu information de l'ordinateur, que souhaitez-vous faire ?
                     break
                     ;;
                 10) #Fonction memoire RAM total
-                    echo "TODO ajout de la fonction memoire RAM total"
+                    ram_total $choix_user $choix_ordinateur
                     break
                     ;;
                 11) #Fonction utilisation de la RAM
-                    echo "TODO ajout de la fonction utilisation de la RAM"
+                    ram_use $choix_user $choix_ordinateur
                     break
                     ;;
                 12) #Fonction recherche des événements dans le fichier log_evt.log
@@ -563,18 +583,33 @@ Menu ordinateur, que souhaitez-vous faire ?
 
 #####################################################
 # Fonction Memoire RAM total
-# Auteur : 
+# Auteur : pierre 
 # 
 #####################################################
-
+function ram_total()
+{
+call_ssh_EOF $1 $2 <<-"EOF"
+    ram=$(free)
+    ram=$(echo $ram | cut -d' ' -f8)
+    echo $ram
+EOF
+}
 
 
 #####################################################
 # Fonction Utilisation de la RAM
-# Auteur : 
+# Auteur :pierre
 # 
 #####################################################
 
+function ram_use()
+{
+call_ssh_EOF $1 $2 <<-"EOF"
+        ram=$(free)
+        ram=$(echo $ram | cut -d' ' -f9)
+        echo $ram
+EOF
+}
 
 
 #####################################################
@@ -634,7 +669,7 @@ Menu action de l'ordinateur, que souhaitez-vous faire ?
                     break
                     ;;
                 5) #Fonction Mise a jour du système
-                    echo "TODO ajout de la fonction Mise a jour du système"
+                    update_system $choix_user $choix_ordinateur
                     break
                     ;;
                 6) #Fonction Creation de repertoire
@@ -723,10 +758,13 @@ Menu ordinateur, que souhaitez-vous faire ?
 
 #####################################################
 # Fonction Mise a jour du système
-# Auteur : 
+# Auteur : pierre 
 # 
 #####################################################
-
+function update_system()
+{
+    call_ssh $1 $2 "sudo apt update && sudo apt upgrade"
+}
 
 
 #####################################################
@@ -800,6 +838,9 @@ Menu ordinateur, que souhaitez-vous faire ?
 #####################################################
 
 
+#demande la cible
+read -p "quelle ordinateur voulez vous cibler? " choix_ordinateur
+read -p "quelle utilisateur voulez vous cibler? " choix_ordinateur
 
 #Lancement de la fonction menu pour initialiser le Script Sumo
 menu 
