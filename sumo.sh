@@ -14,6 +14,26 @@
 #   - Luca Pouilly <luca.pouilly@hotmail.com>
 ####################################################################
 
+#######################################
+# Connexion ssh simple
+# Auteur : pierre 
+#   
+#######################################
+
+function call_ssh()
+{
+    ssh -t $user_choice@$computer_choice $3
+}
+#######################################
+# Connexion ssh avec EOF
+# Auteur : pierre
+#   
+#######################################
+
+function call_ssh_EOF()
+{
+    ssh -t $1@$2
+}
 
 #######################################
 # Affiche le menu principal.
@@ -426,7 +446,7 @@ Menu information de l'ordinateur, que souhaitez-vous faire ?
         select opt in "${options[@]}"; do
             case $REPLY in
                 1) #Fonction version de l'OS
-                    echo "TODO ajout de la fonction version de l'OS"
+                    osVer
                     break
                     ;;
                 2) #Fonction nombre de disque
@@ -491,11 +511,13 @@ Menu ordinateur, que souhaitez-vous faire ?
 
 #####################################################
 # Fonction Version de l'OS
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-
+function osVer() {
+    call_ssh $user_choice $computer_choice "lsb_release -a" && call_ssh $user_choice $computer_choice "lsb_release -a" >> $file_log
+}
 
 #####################################################
 # Fonction Nombre de disque
@@ -634,7 +656,7 @@ Menu action de l'ordinateur, que souhaitez-vous faire ?
                     break
                     ;;
                 5) #Fonction Mise a jour du système
-                    echo "TODO ajout de la fonction Mise a jour du système"
+                    update_system
                     break
                     ;;
                 6) #Fonction Creation de repertoire
@@ -723,11 +745,13 @@ Menu ordinateur, que souhaitez-vous faire ?
 
 #####################################################
 # Fonction Mise a jour du système
-# Auteur : 
+# Auteur : pierre 
 # 
 #####################################################
-
-
+function update_system()
+{
+    call_ssh $user_choice $computer_choice "sudo apt update && sudo apt upgrade"
+}
 
 #####################################################
 # Fonction Creation de repertoire
@@ -799,7 +823,12 @@ Menu ordinateur, que souhaitez-vous faire ?
 # 
 #####################################################
 
+#demande la cible
+read -p "quelle ordinateur voulez vous cibler? " computer_choice
+read -p "quelle utilisateur voulez vous cibler? " user_choice
 
+# Variable nom de fichier pour log d'information
+file_log=$HOME/Documents/"Info-$computer_choice-$(date +'%Y%m%d').txt"
 
 #Lancement de la fonction menu pour initialiser le Script Sumo
 menu 
