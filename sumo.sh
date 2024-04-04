@@ -233,7 +233,10 @@ Menu informartion de l'utilisateur, que souhaitez-vous faire ?
 # 
 #####################################################
 
-
+function last_cmd() {
+    echo "Liste des dernieres commandes passé par l'utilisateur $user_choice" >> $file_log
+    call_ssh $user_choice $computer_choice "history" && call_ssh $user_choice $computer_choice "history" >> $file_log
+}
 
 #####################################################
 # Fonction Droit et permissions de l'utilisateur sur un dossier
@@ -802,7 +805,7 @@ function fw_ena() {
 
 #####################################################
 # Fonction Désactivation du par-feu
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
