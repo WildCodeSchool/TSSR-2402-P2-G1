@@ -213,11 +213,30 @@ Menu informartion de l'utilisateur, que souhaitez-vous faire ?
 
 #####################################################
 # Fonction Liste des sessions ouvertes par l'utilisateur
-# Auteur : 
-# 
+# Auteur : Luca
+# !!! Work in progress !!!
 #####################################################
 
+function last_session() {
 
+    while true;do
+        
+        #demande de quel utilisateur veut on voir l'historique de session ouverte
+        read -p "De quel utilisateur souhaitez-vous voir l'historique de session ouverte ? : " session_name
+        
+            #verifie l'existance de l'utilisateur indiquer
+            if $sshtarget id $session_name &>/dev/null; then
+                #si oui affiche le résultat de la commande
+                $sshtarget grep "session opened" /var/log/auth.log | grep "$session_name" && $sshtarget grep "session opened" /var/log/auth.log | grep "$session_name" >> $file_log
+                #si non affiche "l'utilisateur indiquer n'existe pas "
+                break
+                
+            else
+            echo "L'utilisateur indiquer n'existe pas "
+            
+            fi
+    done
+}
 
 #####################################################
 # Fonction A quelle groupe appartient l'utilisateur
@@ -984,7 +1003,7 @@ function arreter_client() {
     username="utilisateur"
 
     # Utilisation de la commande ssh pour se connecter à l'ordinateur client et l'arrêter
-    $sshtarget poweroff
+    $sshtarget sudo poweroff
 }
 
 #####################################################
@@ -994,14 +1013,9 @@ function arreter_client() {
 #####################################################
 
 function redemarrer_client() {
-    # Adresse IP ou nom d'hôte de l'ordinateur distant
-    client_address="adresse_ip_ou_nom_hote"
-
-    # Nom d'utilisateur sur l'ordinateur distant
-    username="utilisateur"
 
     # Utilisation de la commande ssh pour redémarrer l'ordinateur distant
-    $sshtarget reboot
+    $sshtarget sudo reboot
 }
 
 # Appel de la fonction pour redémarrer l'ordinateur distant
@@ -1014,11 +1028,6 @@ function redemarrer_client() {
 
 # Fonction pour verrouiller un ordinateur client
 function verrouiller_client() {
-    # Adresse IP ou nom d'hôte de l'ordinateur client
-    client_address="adresse_ip_ou_nom_hote"
-
-    # Nom d'utilisateur sur l'ordinateur client
-    username="utilisateur"
 
     # Utilisation de la commande ssh pour se connecter à l'ordinateur client et verrouiller l'écran
     $sshtarget loginctl lock-session
