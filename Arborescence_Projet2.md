@@ -13,13 +13,14 @@
     - 9. Retour au menu précédent
 
   - #### 2. Action
-    - 1. Changer le mot de passe d'un compte
-    - 2. Suppression d'un compte utilisateur
-    - 3. Désactivation d'un compte utilisateur local
-    - 4. Ajout a un groupe d'administration
-    - 5. Ajout a un groupe local
-    - 6. Sortie d'un groupe local
-    - 7. Retour au menu précédent
+    - 1. Création d'un compte local
+    - 2. Changer le mot de passe d'un compte
+    - 3. Suppression d'un compte utilisateur
+    - 4. Désactivation d'un compte utilisateur local
+    - 5. Ajout a un groupe d'administration
+    - 6. Ajout a un groupe local
+    - 7. Sortie d'un groupe local
+    - 8. Retour au menu précédent
 
   - #### 3. Retour au menu précédent
 
@@ -40,20 +41,20 @@
     - 13. Retour au menu précédent
 
   - #### 2. Action
-    - 1. Création d'un compte local
-    - 2. Arrêt
-    - 3. Redémarrage
-    - 4. Verrouillage
-    - 5. Mise a jour du système
-    - 6. Creation de repertoire
-    - 7. Modification de repertoire
-    - 8. Suppression d'un repertoire
-    - 9. Prise de main a distance
-    - 10. Activation du par-feu
-    - 11. Désactivation du par-feu
-    - 12. Installation de logiciel
-    - 13. Désinstallation de logiciel
-    - 14. Execution de script sur la machine distante
-    - 15. Retour au menu précédent
+
+    - 1. Arrêt
+    - 2. Redémarrage
+    - 3. Verrouillage
+    - 4. Mise a jour du système
+    - 5. Creation de repertoire
+    - 6. Modification de repertoire
+    - 7. Suppression d'un repertoire
+    - 8. Prise de main a distance
+    - 9. Activation du pare-feu
+    - 10. Désactivation du pare-feu
+    - 11. Installation de logiciel
+    - 12. Désinstallation de logiciel
+    - 13. Execution de script sur la machine distante
+    - 14. Retour au menu précédent
 
   - #### 3. Retour au menu précédent
