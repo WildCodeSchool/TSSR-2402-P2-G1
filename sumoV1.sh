@@ -292,6 +292,7 @@ function menu:user:action() {
 Menu action de l'utilisateur, que souhaitez-vous faire ?
 --------------------------------------------------------\e[0m"
     local options=(
+        "Création d'un compte local"
         "Changer le mot de passe d'un compte"
         "Suppression d'un compte utilisateur"
         "Désactivation d'un compte utilisateur local"
@@ -305,31 +306,35 @@ Menu action de l'utilisateur, que souhaitez-vous faire ?
     while true; do
         select opt in "${options[@]}"; do
             case $REPLY in
-                1) #Fonction changer le mot de passe d'un compte
+                1) #Fonction Création d'un compte local
+                    add_user
+                    break
+                    ;;
+                2) #Fonction changer le mot de passe d'un compte
                     change_pswd
                     break
                     ;;
-                2) #Fonction suppression d'un compte utilisateur
+                3) #Fonction suppression d'un compte utilisateur
                     del_user
                     break
                     ;;
-                3) # Fonction désactivation d'un compte utilisateur local
+                4) # Fonction désactivation d'un compte utilisateur local
                     shut_user
                     break
                     ;;
-                4) # Fonction ajout a un groupe d'administration
+                5) # Fonction ajout a un groupe d'administration
                     admin_grp
                     break
                     ;;
-                5) # Fonction ajout a un groupe local
+                6) # Fonction ajout a un groupe local
                     add_grp
                     break
                     ;;
-                6) # Fonction sortie d'un groupe local
+                7) # Fonction sortie d'un groupe local
                     del_grp
                     break
                     ;;
-                7) #Retour menu précédent
+                8) #Retour menu précédent
                     echo "Back to the futur"
                     echo -e "--------------------------------------------------
 \e[32mMenu utilisateur, que souhaitez-vous faire ?
@@ -342,6 +347,34 @@ Menu action de l'utilisateur, que souhaitez-vous faire ?
                     ;;
             esac
         done
+    done
+}
+
+#####################################################
+# Fonction Création d'un compte local
+# Auteur : Luca
+# 
+#####################################################
+
+#fonction d'ajout d'utilisateur
+add_user() {
+    
+    #demande d'ajouter un nom ou plusieurs
+    read -p "indiquer le nom du ou des utilisateurs séparé par un espace" -a noms
+    
+    for nom in "${noms[@]}"; do
+        if $sshtarget id "$nom"&>/dev/null; then
+            echo "l'utilisateur $nom existe déja"
+        else
+            $sshtarget sudo useradd "$nom"
+            
+            if $sshtarget id "$nom"&>/dev/null; then
+                echo "l'utilisateur $nom à bien été crée"
+            else
+                echo "erreur de création de l'utilisateur $nom"
+            
+            fi
+        fi
     done
 }
 
@@ -868,7 +901,6 @@ function menu:computer:action() {
 Menu action de l'ordinateur, que souhaitez-vous faire ?
 -------------------------------------------------------\e[0m"
     local options=(
-        "Création d'un compte local"
         "Arrêt"
         "Redémarrage"
         "Verrouillage"
@@ -889,63 +921,59 @@ Menu action de l'ordinateur, que souhaitez-vous faire ?
     while true; do
         select opt in "${options[@]}"; do
             case $REPLY in
-                1) #Fonction Création d'un compte local
-                    add_user
-                    break
-                    ;;
-                2) #Fonction Arrêt
+                1) #Fonction Arrêt
                     arreter_client
                     break
                     ;;
-                3) #Fonction Redémarrage
+                2) #Fonction Redémarrage
                     redemarrer_client
                     break
                     ;;
-                4) #Fonction Verrouillage
+                3) #Fonction Verrouillage
                     verrouiller_client
                     break
                     ;;
-                5) #Fonction Mise a jour du système
+                4) #Fonction Mise a jour du système
                     update_system $choix_user $choix_ordinateur
                     break
                     ;;
-                6) #Fonction Creation de repertoire
+                5) #Fonction Creation de repertoire
                     echo "TODO ajout de la fonction Creation de repertoire"
                     break
                     ;;
-                7) #Fonction Modification de repertoire
+                6) #Fonction Modification de repertoire
                     echo "TODO ajout de la fonction Modification de repertoire"
                     break
                     ;;
-                8) #Fonction Suppression d'un repertoire
+                7) #Fonction Suppression d'un repertoire
                     echo "TODO ajout de la fonction Suppression d'un repertoire"
                     break
                     ;;
-                9) #Fonction Prise de main a distance
+                8) #Fonction Prise de main a distance
                     echo "TODO ajout de la fonction Prise de main a distance"
                     break
                     ;;
-                10) #Fonction Activation du par-feu
+                9) #Fonction Activation du par-feu
                     fw_ena
                     break
                     ;;
-                11) #Fonction Désactivation du par-feu
+                10) #Fonction Désactivation du par-feu
                     fw_disa
                     break
                     ;;
-                12) #Fonction Installation de logiciel
+                11) #Fonction Installation de logiciel
                     echo "TODO ajout de la fonction Installation de logiciel"
                     break
                     ;;
-                13) #Fonction Désinstallation de logiciel
+                12) #Fonction Désinstallation de logiciel
                     echo "TODO ajout de la fonction Désinstallation de logiciel"
                     break
                     ;;
-                14) #Fonction Execution de script sur la machine distante
+                13) #Fonction Execution de script sur la machine distante
                     echo "TODO ajout de la fonction Execution de script sur la machine distante"
                     break
                     ;;
-                15) #Retour menu précédent
+                14) #Retour menu précédent
                     echo "Back to the futur"
                     echo -e "\e[32m-------------------------------------------
 Menu ordinateur, que souhaitez-vous faire ?
@@ -961,33 +989,6 @@ Menu ordinateur, que souhaitez-vous faire ?
     done
 }
 
-#####################################################
-# Fonction Création d'un compte local
-# Auteur : Luca
-# 
-#####################################################
-
-#fonction d'ajout d'utilisateur
-add_user() {
-    
-    #demande d'ajouter un nom ou plusieurs
-    read -p "indiquer le nom du ou des utilisateurs séparé par un espace" -a noms
-    
-    for nom in "${noms[@]}"; do
-        if $sshtarget id "$nom"&>/dev/null; then
-            echo "l'utilisateur $nom existe déja"
-        else
-            $sshtarget sudo useradd "$nom"
-            
-            if $sshtarget id "$nom"&>/dev/null; then
-                echo "l'utilisateur $nom à bien été crée"
-            else
-                echo "erreur de création de l'utilisateur $nom"
-            
-            fi
-        fi
-    done
-}
 
 #####################################################
 # Fonction Arrêt
