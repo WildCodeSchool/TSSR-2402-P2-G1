@@ -42,6 +42,8 @@ function call_ssh_EOF()
 #######################################
 
 function menu() {
+    $logs Démarrage du script pour $choix_user sur $choix_ordinateur
+    $logs Menu de selection
     echo -e "\e[32m----------------------------------------------------------
 Bonjour, bienvenue dans Sumo, comment puis-je vous aider ?
 ----------------------------------------------------------\e[0m"
@@ -56,19 +58,24 @@ Bonjour, bienvenue dans Sumo, comment puis-je vous aider ?
         select opt in "${options[@]}"; do 
             case $REPLY in
                 1) # Cibler un utilisateur
+                    $logs Choix utilisateur
                     menu:user
                     break
                     ;;
                 2) # Cibler un ordinateur
+                    $logs Choix ordinateur
                     menu:computer
                     break
                     ;;
                 3) # Sortie du script
+                    $logs Fin du Script
+                    journalctl | grep $0 >> /var/log/log_evt.log
                     echo -e "\e[32mSumo vous remercie d'avoir fait appel a ses services.\e[0m"
                     echo " "
                     break 2
                     ;;
                 *) # Pour tout les autres choix
+                    $logs Choix $REPLY incorrect
                     echo -e "\e[31mCe choix n'est pas disponible, merci de saisir 1, 2 ou 3.\e[0m"
                     break
                     ;;
@@ -98,14 +105,17 @@ function menu:user() {
         select opt in "${options[@]}"; do
             case $REPLY in 
                 1) #Information utilisateur
+                    $logs Choix information utilisateur
                     menu:user:info
                     break
                     ;;
                 2) #Action utilisateur
+                    $logs Choix action utilisateur
                     menu:user:action
                     break
                     ;;
                 3) #Retour menu précédent
+                    $logs Retour menu principal
                     echo "Back to the futur"
                     echo -e "\e[32m----------------------------------------------------------
 Bonjour, bienvenue dans Sumo, comment puis-je vous aider ?
@@ -113,6 +123,7 @@ Bonjour, bienvenue dans Sumo, comment puis-je vous aider ?
                     break 2
                     ;;
                 *) # Pour tout les autres choix
+                    $logs Choix $REPLY incorrect
                     echo -e "\e[31mCe choix n'est pas disponible, merci de saisir 1, 2 ou 3.\e[0m"
                     break
                     ;;
@@ -148,38 +159,47 @@ Menu informartion de l'utilisateur, que souhaitez-vous faire ?
         select opt in "${options[@]}"; do
             case $REPLY in
                 1) #Fonction de la date de derniere connexion
+                    $logs $REPLY Date de la derniere connexion
                     echo "TODO ajout de la fonction date de connexion"
                     break
                     ;;
                 2) #Fonction de la date de la dernière modification du mot de passe
+                    $logs $REPLY Date de la dernière modification du mot de passe
                     echo "TODO ajout de la fonction de la date de la dernière modification du mot de passe"
                     break
                     ;;
                 3) #Fonction de la liste des sessions ouvertes par l'utilisateur
+                    $logs $REPLY Liste des sessions ouvertes par l'utilisateur
                     echo "TODO ajout de la fonction de la liste des sessions ouvertes par l'utilisateur"
                     break
                     ;;
                 4) #Fonction de quelle groupe appartient l'utilisateur
+                    $logs $REPLY A quelle groupe appartient l'utilisateur
                     echo "TODO ajout de la fonction de quelle groupe appartient l'utilisateur"
                     break
                     ;;
                 5) #Fonction de la liste des commandes utiliser par l'utilisateur
+                    $logs $REPLY Liste des commandes utiliser par l'utilisateur
                     last_cmd
                     break
                     ;;
                 6) #Fonction des droit et permissions de l'utilisateur sur un dossier
-                    echo "TODO ajout de la fonction des droit et permissions de l'utilisateur sur un dossier"
+                    $logs $REPLY Droits et permissions de l'utilisateur sur un dossier
+                    echo "TODO ajout de la fonction des droits et permissions de l'utilisateur sur un dossier"
                     break
                     ;;
                 7) #Fonction des droit et permissions de l'utilisateur sur un fichier
+                    $logs $REPLY Droits et permissions de l'utilisateur sur un fichier
                     echo "TODO ajout de la fonction des droit et permissions de l'utilisateur sur un fichier"
                     break
                     ;;
                 8) #Fonction de la recherche des événements dans le fichier log_evt.log
+                    $logs $REPLY Recherche des événements dans le fichier log_evt.log pour l'utilisateur
                     echo "TODO ajout de la fonction de la recherche des événements dans le fichier log_evt.log"
                     break
                     ;;
                 9) #Retour menu précédent
+                    $logs Retour menu utilisateur
                     echo "Back to the futur"
                     echo -e "--------------------------------------------------
 \e[32mMenu utilisateur, que souhaitez-vous faire ?
@@ -187,6 +207,7 @@ Menu informartion de l'utilisateur, que souhaitez-vous faire ?
                     break 2
                     ;;
                 *) # Pour tout les autres choix
+                    $logs Choix $REPLY incorrect
                     echo -e "\e[31mCe choix n'est pas disponible, merci de saisir un chiffre entre 1 et 9.\e[0m"
                     break
                     ;;
@@ -307,34 +328,42 @@ Menu action de l'utilisateur, que souhaitez-vous faire ?
         select opt in "${options[@]}"; do
             case $REPLY in
                 1) #Fonction Création d'un compte local
+                    $logs $REPLY Création d\'un compte local
                     add_user
                     break
                     ;;
                 2) #Fonction changer le mot de passe d'un compte
+                    $logs $REPLY Changer le mot de passe d\'un compte
                     change_pswd
                     break
                     ;;
                 3) #Fonction suppression d'un compte utilisateur
+                    $logs $REPLY Suppression d\'un compte utilisateur
                     del_user
                     break
                     ;;
                 4) # Fonction désactivation d'un compte utilisateur local
+                    $logs $REPLY Désactivation d\'un compte utilisateur local
                     shut_user
                     break
                     ;;
                 5) # Fonction ajout a un groupe d'administration
+                    $logs $REPLY Ajout a un groupe d\'administration
                     admin_grp
                     break
                     ;;
                 6) # Fonction ajout a un groupe local
+                    $logs $REPLY Ajout a un groupe local
                     add_grp
                     break
                     ;;
                 7) # Fonction sortie d'un groupe local
+                    $logs $REPLY Sortie d\'un groupe local
                     del_grp
                     break
                     ;;
                 8) #Retour menu précédent
+                    $logs Retour menu utilisateur
                     echo "Back to the futur"
                     echo -e "--------------------------------------------------
 \e[32mMenu utilisateur, que souhaitez-vous faire ?
@@ -342,6 +371,7 @@ Menu action de l'utilisateur, que souhaitez-vous faire ?
                     break 2
                     ;;
                 *) # Pour tout les autres choix
+                    $logs Choix $REPLY incorrect
                     echo -e "\e[31mCe choix n'est pas disponible, merci de saisir un chiffre entre 1 et 7.\e[0m"
                     break
                     ;;
@@ -646,14 +676,17 @@ Menu ordinateur, que souhaitez-vous faire ?
         select opt in "${options[@]}"; do
             case $REPLY in
                 1) #Information ordinateur
+                    $logs Choix information ordinateur
                     menu:computer:info
                     break
                     ;;
                 2) #Action ordinateur
+                    $logs Choix action ordinateur
                     menu:computer:action
                     break
                     ;;
                 3) #Retour menu précédent
+                    $logs Retour menu principal
                     echo "Back to the futur"
                     echo -e "\e[32m----------------------------------------------------------
 Bonjour, bienvenue dans Sumo, comment puis-je vous aider ?
@@ -661,6 +694,7 @@ Bonjour, bienvenue dans Sumo, comment puis-je vous aider ?
                     break 2
                     ;;
                 *) # Pour tout les autres choix
+                    $logs Choix $REPLY incorrect
                     echo -e "\e[31mCe choix n'est pas disponible, merci de saisir 1, 2 ou 3.\e[0m"
                     break
                     ;;
@@ -700,54 +734,67 @@ Menu information de l'ordinateur, que souhaitez-vous faire ?
         select opt in "${options[@]}"; do
             case $REPLY in
                 1) #Fonction version de l'OS
+                    $logs $REPLY Version de l\'OS
                     osVer
                     break
                     ;;
                 2) #Fonction nombre de disque
+                    $logs $REPLY Nombre de disque
                     nbDsk
                     break
                     ;;
                 3) #Fonction partition
+                    $logs $REPLY Partition
                     echo "TODO ajout de la fonction partition"
                     break
                     ;;
                 4) #Fonction espace disque restant par partitions
+                    $logs $REPLY Espace disque restant par partitions
                     echo "TODO ajout de la fonction espace disque restant par partitions"
                     break
                     ;;
                 5) #Fonction nom et espace disque d'un dossier
+                    $logs $REPLY Nom et espace disque d\'un dossier
                     echo "TODO ajout de la fonction nom et espace disque d'un dossier"
                     break
                     ;;
                 6) #Fonction liste des lecteurs monté
+                    $logs $REPLY Liste des lecteurs monté
                     echo "TODO ajout de la fonction liste des lecteurs monté"
                     break
                     ;;
                 7) #Fonction liste des applications/paquets installées
+                    $logs $REPLY Liste des applications/paquets installées
                     echo "TODO ajout de la fonction liste des applications/paquets installées"
                     break
                     ;;
                 8) #Fonction liste des services en cours d'execution
+                    $logs $REPLY Liste des services en cours d\'execution
                     echo "TODO ajout de la fonction liste des services en cours d'execution"
                     break
                     ;;
                 9) #Fonction liste des utilisateurs locaux
+                    $logs $REPLY Liste des utilisateurs locaux
                     echo "TODO ajout de la fonction liste des utilisateurs locaux"
                     break
                     ;;
                 10) #Fonction memoire RAM total
+                    $logs $REPLY Memoire RAM total
                     ram_total $choix_user $choix_ordinateur
                     break
                     ;;
                 11) #Fonction utilisation de la RAM
+                    $logs $REPLY Utilisation de la RAM
                     ram_use $choix_user $choix_ordinateur
                     break
                     ;;
                 12) #Fonction recherche des événements dans le fichier log_evt.log
+                    $logs $REPLY Recherche des événements dans le fichier log_evt.log pour l\'ordinateur
                     echo "TODO ajout de la fonction recherche des événements dans le fichier log_evt.log"
                     break
                     ;;
                 13) #Retour menu précédent
+                    $logs Retour menu ordinateur
                     echo "Back to the futur"
                     echo -e "\e[32m-------------------------------------------
 Menu ordinateur, que souhaitez-vous faire ?
@@ -755,6 +802,7 @@ Menu ordinateur, que souhaitez-vous faire ?
                     break 2
                     ;;
                 *) # Pour tout les autres choix
+                    $logs Choix $REPLY incorrect
                     echo -e "\e[31mCe choix n'est pas disponible, merci de saisir un nombre entre 1 et 13.\e[0m"
                     break;;
             esac
@@ -922,58 +970,72 @@ Menu action de l'ordinateur, que souhaitez-vous faire ?
         select opt in "${options[@]}"; do
             case $REPLY in
                 1) #Fonction Arrêt
+                    $logs $REPLY Arrêt
                     arreter_client
                     break
                     ;;
                 2) #Fonction Redémarrage
+                    $logs $REPLY Redémarrage
                     redemarrer_client
                     break
                     ;;
                 3) #Fonction Verrouillage
+                    $logs $REPLY Verrouillage
                     verrouiller_client
                     break
                     ;;
                 4) #Fonction Mise a jour du système
+                    $logs $REPLY Mise a jour du système
                     update_system $choix_user $choix_ordinateur
                     break
                     ;;
                 5) #Fonction Creation de repertoire
+                    $logs $REPLY Creation de repertoire
                     echo "TODO ajout de la fonction Creation de repertoire"
                     break
                     ;;
                 6) #Fonction Modification de repertoire
+                    $logs $REPLY Modification de repertoire
                     echo "TODO ajout de la fonction Modification de repertoire"
                     break
                     ;;
                 7) #Fonction Suppression d'un repertoire
+                    $logs $REPLY Suppression d\'un repertoire
                     echo "TODO ajout de la fonction Suppression d'un repertoire"
                     break
                     ;;
                 8) #Fonction Prise de main a distance
+                    $logs $REPLY Prise de main a distance
                     echo "TODO ajout de la fonction Prise de main a distance"
                     break
                     ;;
-                9) #Fonction Activation du par-feu
+                9) #Fonction Activation du pare-feu
+                    $logs $REPLY Activation du pare-feu
                     fw_ena
                     break
                     ;;
-                10) #Fonction Désactivation du par-feu
+                10) #Fonction Désactivation du pare-feu
+                    $logs $REPLY Désactivation du pare-feu
                     fw_disa
                     break
                     ;;
                 11) #Fonction Installation de logiciel
+                    $logs $REPLY Installation de logiciel
                     echo "TODO ajout de la fonction Installation de logiciel"
                     break
                     ;;
                 12) #Fonction Désinstallation de logiciel
+                    $logs $REPLY Désinstallation de logiciel
                     echo "TODO ajout de la fonction Désinstallation de logiciel"
                     break
                     ;;
                 13) #Fonction Execution de script sur la machine distante
+                    $logs $REPLY Execution de script sur la machine distante
                     echo "TODO ajout de la fonction Execution de script sur la machine distante"
                     break
                     ;;
                 14) #Retour menu précédent
+                    $logs Retour menu ordinateur
                     echo "Back to the futur"
                     echo -e "\e[32m-------------------------------------------
 Menu ordinateur, que souhaitez-vous faire ?
@@ -981,6 +1043,7 @@ Menu ordinateur, que souhaitez-vous faire ?
                     break 2
                     ;;
                 *) # Pour tout les autres choix
+                    $logs Choix $REPLY incorrect
                     echo -e "\e[31mCe choix n'est pas disponible, merci de saisir un nombre entre 1 et 15.\e[0m"
                     break
                     ;;
@@ -1152,12 +1215,17 @@ Bonjour, bienvenue dans Sumo, merci d'entrer les identifiants à cibler.
 read -p "Quel ordinateur voulez-vous cibler? : " choix_ordinateur
 read -p "Quel utilisateur voulez-vous cibler? : " choix_user
 
+$logs Démarrage du script pour $choix_user sur $choix_ordinateur
+
 #Variable pour la connexion SSH
 
 sshtarget="ssh -t $choix_user@$choix_ordinateur"
 
 # Variable nom de fichier pour log d'information
 file_log=$HOME/Documents/"Info-$choix_ordinateur-$(date +'%Y%m%d').txt"
+
+# Variable Logger pour le fichier "log_evt.log"
+logs="logger -t $0 $choix_user $choix_ordinateur"
 
 #Lancement de la fonction menu pour initialiser le Script Sumo
 menu 
