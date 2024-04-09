@@ -1,26 +1,23 @@
 #!/bin/bash
 
-# Fonction pour créer un répertoire 
-creer_repertoire_a_distance() {
-    # Adresse IP ou nom d'hôte de l'ordinateur distant
-    distant_address="172.16.10.30"
 
-    # Nom d'utilisateur sur l'ordinateur distant
-    username="wilder"
+Function creer_repertoire() {
+    $logs début création de répertoire
 
-    # Nom du répertoire à créer
-    repertoire="nouveau_repertoire"
+    # Demande du nom du répertoire à créer
+    read -p "Entrez le nom du répertoire à créer : " nom_repertoire
 
-    # Utilisation de la commande ssh pour créer le répertoire à distance avec mkdir
-    ssh "$username@$distant_address" "mkdir -p $repertoire"
 
-    # Vérification si la commande mkdir a réussi sur l'ordinateur distant
-    if [ $? -eq 0 ]; then
-        echo "Répertoire '$repertoire' créé avec succès sur l'ordinateur distant."
+    $sshtarget "mkdir -p '$nom_repertoire'"
+
+    # Vérification si la création du répertoire a réussi
+    if $sshtarget "[ -d '$nom_repertoire' ]"; then
+        echo "Répertoire '$nom_repertoire' créé avec succès."
+        $logs Répertoire $nom_repertoire créé avec succès.
     else
-        echo "Échec de la création du répertoire '$repertoire' sur l'ordinateur distant."
+        echo "Échec de la création du répertoire '$nom_repertoire'."
+        $logs Échec lors de la création du répertoire $nom_repertoire
     fi
-}
 
-# Appel de la fonction pour créer le répertoire à distance
-creer_repertoire_a_distance
+    $logs Fin création de répertoire
+}
