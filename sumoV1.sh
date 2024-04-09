@@ -1111,7 +1111,7 @@ function update_system()
 
 #####################################################
 # Fonction Creation de repertoire
-# Auteur : 
+# Auteur : Ahmed
 # 
 #####################################################
 
@@ -1127,7 +1127,7 @@ function update_system()
 
 #####################################################
 # Fonction Suppression d'un repertoire
-# Auteur : 
+# Auteur : Ahmed
 # 
 #####################################################
 
