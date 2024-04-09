@@ -1,16 +1,20 @@
 #!/bin/bash
 
-# Fonction pour redémarrer l'ordinateur distant immédiatement
+
+
 function redemarrer_client() {
-    # Adresse IP ou nom d'hôte de l'ordinateur distant
-    client_address="adresse_ip_ou_nom_hote"
+    $logs début redémarrage de l'ordinateur client
 
-    # Nom d'utilisateur sur l'ordinateur distant
-    username="utilisateur"
+    $sshtarget "sudo shutdown -r now"
 
-    # Utilisation de la commande ssh pour redémarrer l'ordinateur distant
-    ssh "$ssh wilder@172.16.10.30" "sudo shutdown -r now"
+    # Vérification si le redémarrage de l'ordinateur client a réussi
+    if [ $? -eq 0 ]; then
+        echo "L'ordinateur client a été redémarré avec succès."
+        $logs L'ordinateur client a été redémarré avec succès.
+    else
+        echo "Échec du redémarrage de l'ordinateur client."
+        $logs Échec du redémarrage de l'ordinateur client.
+    fi
+
+    $logs Fin redémarrage de l'ordinateur client
 }
-
-# Appel de la fonction pour redémarrer l'ordinateur distant
-redemarrer_client
