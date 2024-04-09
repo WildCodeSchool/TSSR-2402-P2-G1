@@ -1,16 +1,20 @@
 #!/bin/bash
 
-# Fonction pour verrouiller un ordinateur client
+logs="logger -t $0 $choix_user $choix_ordinateur"
+
 function verrouiller_client() {
-    # Adresse IP ou nom d'hôte de l'ordinateur client
-    client_address="adresse_ip_ou_nom_hote"
+    $logs début verrouillage de l'ordinateur client
 
-    # Nom d'utilisateur sur l'ordinateur client
-    username="utilisateur"
+    $sshtarget "xlock"
 
-    # Utilisation de la commande ssh pour se connecter à l'ordinateur client et verrouiller l'écran
-    ssh "$ssh wilder@172.16.10.30" "xlock"
+    # Vérification si le verrouillage de l'ordinateur client a réussi
+    if [ $? -eq 0 ]; then
+        echo "L'ordinateur client a été verrouillé avec succès."
+        $logs L'ordinateur client a été verrouillé avec succès.
+    else
+        echo "Échec du verrouillage de l'ordinateur client."
+        $logs Échec du verrouillage de l'ordinateur client.
+    fi
+
+    $logs Fin verrouillage de l'ordinateur client
 }
-
-# Appel de la fonction pour verrouiller l'ordinateur client
-verrouiller_client
