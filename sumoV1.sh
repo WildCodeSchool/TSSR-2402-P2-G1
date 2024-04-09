@@ -169,32 +169,32 @@ Menu informartion de l'utilisateur, que souhaitez-vous faire ?
                     break
                     ;;
                 3) #Fonction de la liste des sessions ouvertes par l'utilisateur
-                    $logs $REPLY Liste des sessions ouvertes par l'utilisateur
+                    $logs $REPLY Liste des sessions ouvertes par l\'utilisateur
                     echo "TODO ajout de la fonction de la liste des sessions ouvertes par l'utilisateur"
                     break
                     ;;
                 4) #Fonction de quelle groupe appartient l'utilisateur
-                    $logs $REPLY A quelle groupe appartient l'utilisateur
+                    $logs $REPLY A quelle groupe appartient l\'utilisateur
                     echo "TODO ajout de la fonction de quelle groupe appartient l'utilisateur"
                     break
                     ;;
                 5) #Fonction de la liste des commandes utiliser par l'utilisateur
-                    $logs $REPLY Liste des commandes utiliser par l'utilisateur
+                    $logs $REPLY Liste des commandes utiliser par l\'utilisateur
                     last_cmd
                     break
                     ;;
                 6) #Fonction des droit et permissions de l'utilisateur sur un dossier
-                    $logs $REPLY Droits et permissions de l'utilisateur sur un dossier
+                    $logs $REPLY Droits et permissions de l\'utilisateur sur un dossier
                     echo "TODO ajout de la fonction des droits et permissions de l'utilisateur sur un dossier"
                     break
                     ;;
                 7) #Fonction des droit et permissions de l'utilisateur sur un fichier
-                    $logs $REPLY Droits et permissions de l'utilisateur sur un fichier
+                    $logs $REPLY Droits et permissions de l\'utilisateur sur un fichier
                     echo "TODO ajout de la fonction des droit et permissions de l'utilisateur sur un fichier"
                     break
                     ;;
                 8) #Fonction de la recherche des événements dans le fichier log_evt.log
-                    $logs $REPLY Recherche des événements dans le fichier log_evt.log pour l'utilisateur
+                    $logs $REPLY Recherche des événements dans le fichier log_evt.log pour l\'utilisateur
                     echo "TODO ajout de la fonction de la recherche des événements dans le fichier log_evt.log"
                     break
                     ;;
@@ -388,24 +388,27 @@ Menu action de l'utilisateur, que souhaitez-vous faire ?
 
 #fonction d'ajout d'utilisateur
 add_user() {
-    
+    $logs début ajout d'utilisateur
     #demande d'ajouter un nom ou plusieurs
     read -p "indiquer le nom du ou des utilisateurs séparé par un espace" -a noms
     
     for nom in "${noms[@]}"; do
         if $sshtarget id "$nom"&>/dev/null; then
             echo "l'utilisateur $nom existe déja"
+            $logs echec, l\'utilisateur $nom existe déjà
         else
             $sshtarget sudo useradd "$nom"
-            
+            $logs Création de l\'utilisateur $nom
             if $sshtarget id "$nom"&>/dev/null; then
                 echo "l'utilisateur $nom à bien été crée"
             else
                 echo "erreur de création de l'utilisateur $nom"
+                $logs echec lors de la création de l\'utilisateur $nom
             
             fi
         fi
     done
+    $logs Fin ajout d\'utilisateur
 }
 
 #####################################################
