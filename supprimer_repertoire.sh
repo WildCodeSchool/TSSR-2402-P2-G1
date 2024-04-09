@@ -1,26 +1,23 @@
 #!/bin/bash
 
-# Fonction pour supprimer un répertoire distant via SS
-supprimer_repertoire_a_distance() {
-    # Adresse IP ou nom d'hôte de l'ordinateur distant
-    distant_address="172.16.10.30"
 
-    # Nom d'utilisateur sur l'ordinateur distant
-    username="wilder"
+function supprimer_repertoire() {
+    $logs début suppression de répertoire
 
-    # Chemin du répertoire à supprimer
-    chemin_repertoire=""
+    # Demande du nom du répertoire à supprimer
+    read -p "Entrez le nom du répertoire à supprimer : " nom_repertoire
 
-    # Utilisation de la commande ssh pour supprimer le répertoire à distance avec rm -r
-    ssh "$username@$distant_address" "rm -r '$chemin_repertoire'"
+    
+    $sshtarget "rm -r '$nom_repertoire'"
 
-    # Vérification si la commande rm a réussi sur l'ordinateur distant
-    if [ $? -eq 0 ]; then
-        echo "Répertoire '$chemin_repertoire' supprimé avec succès sur l'ordinateur distant."
+    # Vérification si la suppression du répertoire a réussi
+    if ! $sshtarget "[ -d '$nom_repertoire' ]"; then
+        echo "Répertoire '$nom_repertoire' supprimé avec succès."
+        $logs Répertoire $nom_repertoire supprimé avec succès.
     else
-        echo "Échec de la suppression du répertoire '$chemin_repertoire' sur l'ordinateur distant."
+        echo "Échec de la suppression du répertoire '$nom_repertoire'."
+        $logs Échec lors de la suppression du répertoire $nom_repertoire
     fi
-}
 
-# Appel de la fonction pour supprimer le répertoire à distance
-supprimer_repertoire_a_distance
+    $logs Fin suppression de répertoire
+}
