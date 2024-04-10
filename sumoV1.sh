@@ -1023,7 +1023,7 @@ Menu action de l'ordinateur, que souhaitez-vous faire ?
                     ;;
                 8) #Fonction Prise de main a distance
                     $logs $REPLY Prise de main a distance
-                    echo "TODO ajout de la fonction Prise de main a distance"
+                    accees_cli
                     break
                     ;;
                 9) #Fonction Activation du pare-feu
@@ -1156,7 +1156,7 @@ function update_system()
 # 
 #####################################################
 
-function () {
+function accees_cli() {
     $logs Accées a distance en CLI sur $choix_ordinateur
     $sshtarget
     $logs Fin d\'accées a distance en CLI
