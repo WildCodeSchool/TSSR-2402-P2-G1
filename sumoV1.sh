@@ -185,12 +185,12 @@ Menu informartion de l'utilisateur, que souhaitez-vous faire ?
                     ;;
                 6) #Fonction des droit et permissions de l'utilisateur sur un dossier
                     $logs $REPLY Droits et permissions de l\'utilisateur sur un dossier
-                    echo "TODO ajout de la fonction des droits et permissions de l'utilisateur sur un dossier"
+                    perm_right_dir
                     break
                     ;;
                 7) #Fonction des droit et permissions de l'utilisateur sur un fichier
                     $logs $REPLY Droits et permissions de l\'utilisateur sur un fichier
-                    echo "TODO ajout de la fonction des droit et permissions de l'utilisateur sur un fichier"
+                    perm_right_file
                     break
                     ;;
                 8) #Fonction de la recherche des événements dans le fichier log_evt.log
@@ -280,19 +280,31 @@ function last_cmd() {
 
 #####################################################
 # Fonction Droit et permissions de l'utilisateur sur un dossier
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-
+function perm_right_dir() {
+    $logs Affichage des droits et permissions dossier pour l\'utilisateur $choix_user
+    read -p "Nom du dossier : " dir_name
+    echo "Droit et permissions de l'utilisateur $choix_user sur le dossier $dir_name"
+    $sshtarget getfacl $dir_name && $$sshtarget getfacl $dir_name >> $file_log
+    $logs Fin affichage des droits et permissions dossier
+}
 
 #####################################################
 # Fonction Droit et permissions de l'utilisateur sur un fichier
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-
+function perm_right_file() {
+    $logs Affichage des droits et permissions fichier pour l\'utilisateur $choix_user
+    read -p "Nom du fichier : " file_name
+    echo "Droit et permissions de l'utilisateur $choix_user sur le dossier $file_name"
+    $sshtarget getfacl $file_name && $$sshtarget getfacl $file_name >> $file_log
+    $logs Fin affichage des droits et permissions fichier
+}
 
 #####################################################
 # Fonction Recherche des événements dans le fichier log_evt.log pour un utilisateur
@@ -947,12 +959,12 @@ $sshtarget free -h | grep 'Mem' | awk '{print $3}' && $sshtarget free -h | grep 
 #####################################################
 
 function computer_log() {
-    $logs Consultation du fichier evt_log.log pour utlisateur
+    $logs Consultation du fichier evt_log.log pour $choix_ordinateur
     journalctl | grep $0 >> /var/log/log_evt.log
-    read -p "Consultation du fichier evt_log.log pour quel utilisateur : " evtclog
-    echo "Extrait du journal evt_log.log pour l'utilisateur $evtclog" >> $file_log
+    read -p "Consultation du fichier evt_log.log pour quel ordinateur : " evtclog
+    echo "Extrait du journal evt_log.log pour l'ordinateur $evtclog" >> $file_log
     cat /var/log/log_evt.log | grep $evtclog && cat /var/log/log_evt.log | grep $evtclog >> $file_log
-    $logs Fin de consultation du fichier evt_log.log pour utilisateur
+    $logs Fin de consultation du fichier evt_log.log pour ordinateur
 }
 
 #####################################################
@@ -1038,17 +1050,17 @@ Menu action de l'ordinateur, que souhaitez-vous faire ?
                     ;;
                 11) #Fonction Installation de logiciel
                     $logs $REPLY Installation de logiciel
-                    echo "TODO ajout de la fonction Installation de logiciel"
+                    install_ware
                     break
                     ;;
                 12) #Fonction Désinstallation de logiciel
                     $logs $REPLY Désinstallation de logiciel
-                    echo "TODO ajout de la fonction Désinstallation de logiciel"
+                    remove_ware
                     break
                     ;;
                 13) #Fonction Execution de script sur la machine distante
                     $logs $REPLY Execution de script sur la machine distante
-                    echo "TODO ajout de la fonction Execution de script sur la machine distante"
+                    script_exec
                     break
                     ;;
                 14) #Retour menu précédent
@@ -1188,7 +1200,12 @@ function fw_disa() {
 # 
 #####################################################
 
-
+function install_ware() {
+    read -p "Nom du logiciel à installer avec APT : " ware
+    $logs Installation du logiciel $ware
+    $sshtarget sudo apt install $ware
+    $logs Fin installation du logiciel
+}
 
 #####################################################
 # Fonction Désinstallation de logiciel
@@ -1196,13 +1213,26 @@ function fw_disa() {
 # 
 #####################################################
 
-
+function remove_ware() {
+    read -p "Nom du logiciel à désinstaller : " unware
+    $logs Désinstallation du logiciel $unware
+    $sshtarget sudo apt remove $unware --purge
+    $logs Fin désinstallation du logiciel
+}
 
 #####################################################
 # Fonction Execution de script sur la machine distante
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
+
+function script_exec() {
+    read -p "Nom du script a éxécuter : " scpt
+    $logs Exécution du script $scpt sur la machine $choix_ordinateur
+    $sshtarget bash $scpt
+    $logs Fin execution du script
+}
+
 
 echo -e "\e[32m                                __ \e[0m"
 echo -e "\e[32m                            ,;.'--'. \e[0m"
