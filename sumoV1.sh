@@ -1152,11 +1152,15 @@ function update_system()
 
 #####################################################
 # Fonction Prise de main a distance
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-
+function () {
+    $logs Accées a distance en CLI sur $choix_ordinateur
+    $sshtarget
+    $logs Fin d\'accées a distance en CLI
+}
 
 #####################################################
 # Fonction Activation du par-feu
