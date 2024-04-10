@@ -308,15 +308,19 @@ function User_Menu_Action {
 # Auteur : 
 # 
 #####################################################
-
-
+function ChangePassword {
+    $nouveauMotDePasse = Read-Host "Veuillez entrer le nouveaux mot de passe" -AsSecureString
+    Invoke-Command -ComputerName "172.16.10.20" -ScriptBlock {net user "$nomUtilisateur" "$nouveauMotDePasse"}
+}
 
 #####################################################
 # Fonction Suppression d'un compte utilisateur
 # Auteur : 
 # 
 #####################################################
-
+function DeleteUser {
+    invoke-Command -ComputerName "172.16.10.20" -scriptblock {Remove-LocalUser -Name $nomUtilisateur}
+}
 
 
 #####################################################
@@ -324,6 +328,9 @@ function User_Menu_Action {
 # Auteur : 
 # 
 #####################################################
+Function DisableUser {
+    Invoke-Command -ComputerName "172.16.10.20" -ScriptBlock {Disable-User -Name $nomUtilisateur}
+}
 
 
 
