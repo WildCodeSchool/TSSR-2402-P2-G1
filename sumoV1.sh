@@ -1,5 +1,5 @@
 #!/bin/bash
-# Branche Main
+# Branche Nico
 
 ####################################################################
 #  Nom du Projet : System for Unified Master Operating aka SUMO
@@ -195,7 +195,7 @@ Menu informartion de l'utilisateur, que souhaitez-vous faire ?
                     ;;
                 8) #Fonction de la recherche des événements dans le fichier log_evt.log
                     $logs $REPLY Recherche des événements dans le fichier log_evt.log pour l\'utilisateur
-                    echo "TODO ajout de la fonction de la recherche des événements dans le fichier log_evt.log"
+                    user_log
                     break
                     ;;
                 9) #Retour menu précédent
@@ -296,11 +296,18 @@ function last_cmd() {
 
 #####################################################
 # Fonction Recherche des événements dans le fichier log_evt.log pour un utilisateur
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-
+function user_log() {
+    $logs Consultation du fichier evt_log.log pour utlisateur
+    journalctl | grep $0 >> /var/log/log_evt.log
+    read -p "Consultation du fichier evt_log.log pour quel utilisateur : " evtulog
+    echo "Extrait du journal evt_log.log pour l'utilisateur $evtulog" >> $file_log
+    cat /var/log/log_evt.log | grep $evtulog && cat /var/log/log_evt.log | grep $evtulog >> $file_log
+    $logs Fin de consultation du fichier evt_log.log pour utilisateur
+}
 
 #####################################################
 # Affiche le sous-menu d'action sur les utilisateurs.
@@ -793,7 +800,7 @@ Menu information de l'ordinateur, que souhaitez-vous faire ?
                     ;;
                 12) #Fonction recherche des événements dans le fichier log_evt.log
                     $logs $REPLY Recherche des événements dans le fichier log_evt.log pour l\'ordinateur
-                    echo "TODO ajout de la fonction recherche des événements dans le fichier log_evt.log"
+                    computer_log
                     break
                     ;;
                 13) #Retour menu précédent
@@ -939,7 +946,14 @@ $sshtarget free -h | grep 'Mem' | awk '{print $3}' && $sshtarget free -h | grep 
 # 
 #####################################################
 
-
+function computer_log() {
+    $logs Consultation du fichier evt_log.log pour utlisateur
+    journalctl | grep $0 >> /var/log/log_evt.log
+    read -p "Consultation du fichier evt_log.log pour quel utilisateur : " evtclog
+    echo "Extrait du journal evt_log.log pour l'utilisateur $evtclog" >> $file_log
+    cat /var/log/log_evt.log | grep $evtclog && cat /var/log/log_evt.log | grep $evtclog >> $file_log
+    $logs Fin de consultation du fichier evt_log.log pour utilisateur
+}
 
 #####################################################
 # Affiche le sous-menu d'action sur les ordinateurs.
