@@ -199,8 +199,8 @@ function User_Menu_info {
 
 #####################################################
 # Fonction Liste des commandes utiliser par l'utilisateur
-# Auteur : 
-# 
+# Auteur : Nico
+#  !!! a reprendre !!!
 #####################################################
 
 Invoke-Command -ScriptBlock { Get-Command } -Session $session
@@ -698,7 +698,7 @@ function Computer_Menu_Action {
 # 
 #####################################################
 
-
+Invoke-Command -ScriptBlock { Restart-Computer -force } -Session $session
 
 #####################################################
 # Fonction Verrouillage
@@ -711,10 +711,10 @@ function Computer_Menu_Action {
 #####################################################
 # Fonction Mise a jour du système
 # Auteur :  
-# 
+#  !!! Faire des conditions pour l'installation de pswindowsupdate !!!
 #####################################################
 
-
+Invoke-Command -ScriptBlock { Install-WindowsUpdate } -Session $session
 
 #####################################################
 # Fonction Creation de repertoire
@@ -770,7 +770,7 @@ Invoke-Command -ScriptBlock { Set-NetFirewallProfile -profile * -Enabled False }
 # 
 #####################################################
 
-
+Invoke-Command -ScriptBlock { Install-Package -name pswindowsupdate -source psgallery } -Session $session
 
 #####################################################
 # Fonction Désinstallation de logiciel
@@ -787,7 +787,7 @@ Invoke-Command -ScriptBlock { Set-NetFirewallProfile -profile * -Enabled False }
 #####################################################
 
 
-$session = New-PSSession -ComputerName 172.16.10.20 -Credential "wilder"
+$session = New-PSSession -ComputerName 172.16.10.20 -Credential "wilder\Azerty1*"
 
 
 Menu
