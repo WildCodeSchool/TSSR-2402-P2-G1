@@ -309,19 +309,17 @@ function User_Menu_Action {
 # 
 #####################################################
 function ChangePassword {
-    $nouveauMotDePasse = Read-Host "Veuillez entrer le nouveaux mot de passe" -AsSecureString
-    Invoke-Command -ComputerName "172.16.10.20" -ScriptBlock {net user "$nomUtilisateur" "$nouveauMotDePasse"}
+$nouveauMotDePasse = Read-Host "Veuillez entrer le nouveaux mot de passe" -AsSecureString
+Invoke-Command -ScriptBlock {net user "$nomUtilisateur" "$nouveauMotDePasse"} -Session $session
 }
-
 #####################################################
 # Fonction Suppression d'un compte utilisateur
 # Auteur : 
 # 
 #####################################################
 function DeleteUser {
-    invoke-Command -ComputerName "172.16.10.20" -scriptblock {Remove-LocalUser -Name $nomUtilisateur}
+Invoke-Command -ScriptBlock {Remove-LocalUser -Name $nomUtilisateur} -Session $session
 }
-
 
 #####################################################
 # Fonction Désactivation d'un compte utilisateur local
@@ -329,18 +327,18 @@ function DeleteUser {
 # 
 #####################################################
 Function DisableUser {
-    Invoke-Command -ComputerName "172.16.10.20" -ScriptBlock {Disable-User -Name $nomUtilisateur}
+Invoke-Command -ScriptBlock {Disable-User -Name $nomUtilisateur} -Session $session
 }
-
-
 
 #####################################################
 # Fonction Ajout a un groupe d'administration
 # Auteur : 
 # 
 #####################################################
-
-
+Function AddAdminGroup {
+    Invoke-Command -ScriptBlock {Add-LocalGroupMember -Group "Administrateurs" -Member "$nomUtilisateur"
+} -Session $session
+    }
 
 #####################################################
 # Fonction Ajout a un groupe local
