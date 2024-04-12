@@ -338,16 +338,17 @@ Invoke-Command -ScriptBlock {Disable-User -Name $nomUtilisateur} -Session $sessi
 Function AddAdminGroup {
     Invoke-Command -ScriptBlock {Add-LocalGroupMember -Group "Administrateurs" -Member "$nomUtilisateur"
 } -Session $session
-    }
+}
 
 #####################################################
 # Fonction Ajout a un groupe local
 # Auteur : 
 # 
 #####################################################
-
-
-
+Function AddLocalGroup {
+    Invoke-Command -ScriptBlock {Add-LocalGroupMember -Group "Local" -Member "$nomUtilisateur"
+} -Session $session
+}
 #####################################################
 # Fonction Sortie d'un groupe local
 # Auteur : 
