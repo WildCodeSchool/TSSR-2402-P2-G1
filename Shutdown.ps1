@@ -1,4 +1,4 @@
-function Redemarrer-Client {
+function Redemarrer-Client () {
     # Adresse IP ou nom d'hôte de l'ordinateur client
     $clientAddress = "adresse_ip_ou_nom_hote"
 
