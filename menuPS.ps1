@@ -12,7 +12,7 @@
 #   - Luca Pouilly <luca.pouilly@hotmail.com>
 ####################################################################
 
-
+$session = New-PSSession -ComputerName 172.16.10.20 -Credential wilder
 #######################################
 # Affiche le menu principal.
 # Auteur : Nico
@@ -257,27 +257,33 @@ function User_Menu_Action {
                 #Fonction Création d'un compte local
                 Write-Host "TODO faire la fonction Création d'un compte local"
             }
-            '2' { ChangePassword
+            '2' {
+                ChangePassword
                 #Fonction Changer le mot de passe d'un compte
                 Write-Host "TODO faire la fonction Changer le mot de passe d'un compte"
             }
-            '3' { DeleteUser
+            '3' {
+                DeleteUser
                 #Fonction Suppression d'un compte utilisateur
                 Write-Host "TODO faire la fonction Suppression d'un compte utilisateur"
             }
-            '4' { DisableUser
+            '4' {
+                DisableUser
                 #Fonction Désactivation d'un compte utilisateur local
                 Write-Host "TODO faire la fonction Désactivation d'un compte utilisateur local"
             }
-            '5' { AddAdminGroup
+            '5' {
+                AddAdminGroup
                 #Fonction Ajout a un groupe d'administration
                 Write-Host "TODO faire la fonction Ajout a un groupe d'administration"
             }
-            '6' { AddLocalGroup
+            '6' {
+                AddLocalGroup
                 #Fonction Ajout a un groupe local
                 Write-Host "TODO faire la fonction Ajout a un groupe local"
             }
-            '7' { RemoveLocalGroup
+            '7' {
+                RemoveLocalGroup
                 #Fonction Sortie d'un groupe local
                 Write-Host "TODO faire la fonction Sortie d'un groupe local"
             }
@@ -308,19 +314,19 @@ function User_Menu_Action {
 # Auteur : 
 # 
 #####################################################
-function ChangePassword {
+function ChangePassword () {
     $nomUtilisateur = Read-Host "Nommez l'utilisateur"
     $nouveauMotDePasse = Read-Host "Veuillez entrer le nouveaux mot de passe" -AsSecureString
-    Invoke-Command -ScriptBlock { net user "$nomUtilisateur" "$nouveauMotDePasse" } -Session $session
+    Invoke-Command -ScriptBlock { param($nomUtilisateur, $nouveauMotDePasse) Set-LocalUser -Name $nomUtilisateur -Password $nouveauMotDePasse } -ArgumentList $nomUtilisateur, $nouveauMotDePasse -Session $session
 }
 #####################################################
 # Fonction Suppression d'un compte utilisateur
 # Auteur : 
 # 
 #####################################################
-function DeleteUser {
-    nomUtilisateur = Read-Host "Nommez l'utilisateur"
-    Invoke-Command -ScriptBlock { Remove-LocalUser -Name $nomUtilisateur } -Session $session
+function DeleteUser () {
+    $nomUtilisateur = Read-Host "Nommez l'utilisateur"
+    Invoke-Command -ScriptBlock { param( $nomUtilisateur) Remove-LocalUser -Name $nomUtilisateur } -ArgumentList $nomUtilisateur -Session $session
 }
 
 #####################################################
@@ -328,9 +334,9 @@ function DeleteUser {
 # Auteur : 
 # 
 #####################################################
-Function DisableUser {
-    nomUtilisateur = Read-Host "Nommez l'utilisateur"
-    Invoke-Command -ScriptBlock { Disable-User -Name $nomUtilisateur } -Session $session
+Function DisableUser () {
+    $nomUtilisateur = Read-Host "Nommez l'utilisateur"
+    Invoke-Command -ScriptBlock { param($nameUser) Disable-User -Name $nameUser } -ArgumentList $nomUtilisateur -Session $session 
 }
 
 #####################################################
@@ -338,10 +344,10 @@ Function DisableUser {
 # Auteur : 
 # 
 #####################################################
-Function AddAdminGroup {
-    nomUtilisateur = Read-Host "Nommez l'utilisateur"
-    Invoke-Command -ScriptBlock { Add-LocalGroupMember -Group "Administrateurs" -Member "$nomUtilisateur"
-    } -Session $session
+Function AddAdminGroup () {
+    $nomUtilisateur = Read-Host "Nommez l'utilisateur"
+    Invoke-Command -ScriptBlock { param($userName) Add-LocalGroupMember -Group Administrateurs -Member $userName
+    } -ArgumentList $nomUtilisateur -Session $session
 }
 
 #####################################################
@@ -349,20 +355,22 @@ Function AddAdminGroup {
 # Auteur : 
 # 
 #####################################################
-Function AddLocalGroup {
-    nomUtilisateur = Read-Host "Nommez l'utilisateur"
-    Invoke-Command -ScriptBlock { Add-LocalGroupMember -Group "Local" -Member "$nomUtilisateur"
-    } -Session $session
+Function AddLocalGroup () {
+    $nomUtilisateur = Read-Host "Nommez l'utilisateur"
+    $localGroup = Read-Host "Nommer dans quel groupe voulez vous ajouter $nomUtilisateur"
+    Invoke-Command -ScriptBlock { param($localGroup, $nomUtilisateur) Add-LocalGroupMember -Group $localGroup -Member $nomUtilisateur
+    } -ArgumentList $localGroup, $nomUtilisateur -Session $session
 }
 #####################################################
 # Fonction Sortie d'un groupe local
 # Auteur : 
 # 
 #####################################################
-Function RemoveLocalGroup {
-    nomUtilisateur = Read-Host "Nommez l'utilisateur"
-    Invoke-Command -ScriptBlock { Remove-LocalGroupMember -Group "Local" -Member "$nomUtilisateur"
-    } -Session $session
+Function RemoveLocalGroup () {
+    $nomUtilisateur = Read-Host "Nommez l'utilisateur"
+    $nomGroup = Read-Host "De quel groupe voulez vous supprimer $nomUtilisateur ? "
+    Invoke-Command -ScriptBlock { param($nomGroup, $nomUtilisateur) Remove-LocalGroupMember -Group $nomGroup -Member $nomUtilisateur
+    } -ArgumentList $nomGroup, $nomUtilisateur -Session $session
 }
 #######################################
 # Affiche le sous-menu ordinateur.
