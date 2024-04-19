@@ -2,61 +2,55 @@
 
 function ram_total()
 {
-    Get-WmiObject Win32_PhysicalMemory | Format-Table capacity
+     Invoke-Command -ScriptBlock { Get-WmiObject Win32_PhysicalMemory | Format-Table capacity } -Session $session
 }
 #fonction pour avoir la version de l'OS
 function os_version()
 {
-    Get-WmiObject Win32_OperatingSystem | Format-Table Version
+    Invoke-Command -ScriptBlock { Get-WmiObject Win32_OperatingSystem | Format-Table Version } -Session $session
 }
 #Fonction pour ajouter un utilisateur
-
-function add_user()
-{
-    
-    $username_user = Read-Host "quelle utilisateur voulez vous ajouter? "
-    if(Get-LocalUser -Name $username_user 2> $null)  
-    {
-        write-host "l'utilisateur existe deja"
+#a revoir pour pas que ca ressemble a chat gpt
+function add_user {
+    $username_user = Read-Host "Quel utilisateur voulez-vous ajouter?"
+    if (Invoke-Command -ScriptBlock {param($username) Get-LocalUser -Name $username 2> $null} -ArgumentList $username_user -Session $session) {
+        Write-Host "L'utilisateur existe déjà."
     }
-    else
-    {
-        $password_user = Read-Host -AsSecureString "choisissez un mot de passe pour le compte? "
-        New-LocalUser -Name $username_user -Password $password_user
-        if(Get-LocalUser -Name $username_user 2> $null)
-        {
-            write-host "l'utilisateur a bien été creer"
+    else {
+        $password_user = Read-Host -AsSecureString "Choisissez un mot de passe pour le compte"
+        Invoke-Command -ScriptBlock {param($username, $password) New-LocalUser -Name $username -Password $password 2> $null} -ArgumentList $username_user, $password_user -Session $session
+        if (Invoke-Command -ScriptBlock {param($username) Get-LocalUser -Name $username} -ArgumentList $username_user -Session $session) {
+            Write-Host "L'utilisateur a bien été créé."
         }
     }
-
 }
 #fonction pour lister les utilisateurs local
 
 function list_user_local()
 {
-    Get-LocalUser | Select-Object Name
+    Invoke-Command -ScriptBlock { Get-LocalUser | Select-Object Name } -Session $session
 }
 #fonction pour afficher les services en cours
 
 function service_run()
 {
-    Get-Service | Where-Object {$_.Status -eq "running"} | Select-Object Name
+    Invoke-Command -ScriptBlock { Get-Service | Where-Object {$_.Status -eq "running"} | Select-Object Name }
 }
 #fonction pour afficher la liste des paquet installer
 
 function list_install()
 {
-   Get-AppxPackage | Select Name 
+   Invoke-Command -ScriptBlock { Get-AppxPackage | Select Name } 
 }
 #fonction pour savoir a quelle groupe appartient l'utilisateur
-
+#fonction a revoir?
 function user_group()
 {
-    $user = Read-Host "quelle utilisateur voulez vous cibler? "
-    if(Get-LocalUser -Name $user 2> $null)  
+    $username_user = Read-Host "quelle utilisateur voulez vous cibler? "
+    if (Invoke-Command -ScriptBlock { param($username) Get-LocalUser -Name $username 2> $null } -ArgumentList $username_user -Session $session)  
     {
-        $group = net user $user  
-        write-host $group[22]
+        Invoke-Command -ScriptBlock { param($username) net user $username | Where { $_ -eq $username} } -ArgumentList $username_user -Session $session  
+        #write-host $group[22]
     }
     else
     {
@@ -64,10 +58,12 @@ function user_group()
     }
 }
 
-function ChangePassword {
-    $nomUtilisateur = Read-Host "Nommez l'utilisateur"
+function change_password()
+{
+    $nomUtilisateur = Read-Host "Nommez l'utilisateur: "
     $nouveauMotDePasse = Read-Host "Veuillez entrer le nouveaux mot de passe" -AsSecureString
-    }
+    Invoke-Command -scriptBlock { param($nomUtilisateur, $nouveauMotDePasse) Get-LocalUser -Name $nomUtilisateur | Set-LocalUser -Password $nouveauMotDePasse } -ArgumentList $nomUtilisateur, $nouveauMotDePasse -Session $session
+}
 
 function last_change_password()
 {
@@ -83,40 +79,30 @@ function last_change_password()
     
 }
 
-function info_disk {
-    # récupérer les lecteurs montés
-$drives = Get-PSDrive -PSProvider 'FileSystem'
 
-#inspecte chaque lecteur et afficher les détails
-foreach ($drive in $drives) {
-    if ($drive.Root -and (Test-Path $drive.Root)) {
-        try { # récupérer les informations pour chaque lecteur
-        $driveInfo = Get-Volume -DriveLetter $drive.Name[0]2>$null
 
-        # Afficher les informations
-        Write-Host "Nom du lecteur: $($drive.Name)"
-        Write-Host "Type de lecteur: $($driveInfo.FileSystemType)"
-        Write-Host "Espace libre: $($driveInfo.SizeRemaining / 1GB -as [int]) GB"
-        Write-Host "Espace total: $($driveInfo.Size / 1GB -as [int]) GB"
+#$choix_users = Read-Host "Utilisateur a joindre"
+#$choix_ordinateur = Read-Host "Ordinateur a joindre"
+$session = New-PSSession -ComputerName "172.16.10.20" -Credential "wilder"
 
-    } 
-    catch {
-        Write-Host "Impossible de récupérer les informations pour le lecteur $($drive.Name)"
-    }
-} 
-else {
-    Write-Host "Le lecteur $($drive.Name) n'est pas accessible ou n'existe pas."
-    }
-}
+# Fonction pour la sauvegarde des actions fait avec le script
+function Write-Log {
+    Add-Content -Path C:\Windows\System32\LogFiles\log_evt.log -Value "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - $env:USERNAME - $choix_users - $choix_ordinateur - $message"
 }
 
-#update_system
+
+#Variables pour le Fichier Log des demandes d'information
+
+$Dates = Get-Date -Format "yyyyMMdd"
+$info_log = "C:\Users\Administrator\Documents\info_wilder_$choix_users_$dates.txt"
+
+
 #ram_total
 #os_version
 #add_user
 #list_user_local
 #service_run
+#list_install
 #user_group
-#ChangePassword
+change_password
 #last_change_password
-#info_disk
