@@ -25,6 +25,8 @@ function Menu {
     Bonjour, bienvenue dans Sumo, comment puis-je vous aider ?
     ----------------------------------------------------------
     "
+    $message = "Début script Sumo"
+    Write-Log
         Write-Host "1. Je veux cibler l'utilisateur."
         Write-Host "2. Je veux cibler l'ordinateur."
         Write-Host "Q. Je veux sortir du script.
@@ -34,20 +36,29 @@ function Menu {
         switch ($choiceM) {
             '1' {
                 #Choix Utilisateur
+                $message = "Choix 1 Utilisateur"
+                Write-Log
+                write-host " "
                 User_Menu
             }
             '2' {
                 #Choix ordinateur
                 Write-Host " "
+                $message = "Choix 2 Ordinateur"
+                Write-Log
                 Computer_Menu
             }
             'q' {
-                Clear-Host
+                #Clear-Host
                 Write-Host "Sumo vous remercie d'avoir fait appel a ses services."
+                $message = "Sortie du script Sumo"
+                Write-Log
                 Exit
             }
             default {
-                Write-Host "Choix invalide. Veuillez selectionner une option valide.
+                $message = "Choix $choiceM invalide"
+                Write-Log
+                Write-Host "Ce choix n'est pas disponible, merci de saisir 1, 2 ou R.
                 "
             }
         }
@@ -75,19 +86,27 @@ function User_Menu {
         switch ($choiceUM) {
             '1' {
                 #Choix information
+                $message = "Choix $choiceUM information utilisateur"
+                Write-Log
                 Write-Host " "
                 User_Menu_info
             }
             '2' {
                 #Choix Action
+                $message = "Choix $choiceUM action utilisateur"
+                Write-Log
                 Write-Host " "
                 User_Menu_Action
             }
             'r' {
                 Write-Host "Back to the futur."
+                $message = "Retour menu précédent"
+                Write-Log
                 return
             }
             default {
+                $message = "Choix $choiceUM invalide"
+                Write-Log
                 Write-Host "Ce choix n'est pas disponible, merci de saisir 1, 2 ou R.
                 "
             }
@@ -122,42 +141,62 @@ function User_Menu_info {
         switch ($choiceUMI) {
             '1' {
                 #Fonction Date de dernière connexion
+                $message = "Choix 1 Date de derniere connexion"
+                Write-Log
                 Write-Host "TODO faire fonction Date de dernière connexion"
             }
             '2' {
                 #Fonction Date de la dernière modification du mot de passe
+                $message = "Choix 2 Date de la dernière modification du mot de passe"
+                Write-Log
                 Write-Host "TODO faire fonction Date de la dernière modification du mot de passe"
             }
             '3' {
                 #Fonction Liste des sessions ouvertes par l'utilisateur
+                $message = "Choix 3 Liste des sessions ouvertes par l'utilisateur"
+                Write-Log
                 Write-Host "TODO faire fonction Liste des sessions ouvertes par l'utilisateur"
             }
             '4' {
                 #Fonction A quelle groupe appartient l'utilisateur
+                $message = "Choix 4 A quelle groupe appartient l'utilisateur"
+                Write-Log
                 Write-Host "TODO faire fonction A quelle groupe appartient l'utilisateur"
             }
             '5' {
                 #Fonction Liste des commandes utiliser par l'utilisateur
-                Write-Host "TODO faire fonction Liste des commandes utiliser par l'utilisateur"
+                $message = "Choix 5 Liste des commandes utiliser par l'utilisateur"
+                Write-Log
+                Write-Host "IMPOSSIBLE SANS PSReadLine"
             }
             '6' {
                 #Fonction Droit et permissions de l'utilisateur sur un dossier
+                $message = "Choix 6 Droit et permissions de l'utilisateur sur un dossier"
+                Write-Log
                 Write-Host "TODO faire fonction Droit et permissions de l'utilisateur sur un dossier"
             }
             '7' {
                 #Fonction Droit et permissions de l'utilisateur sur un fichier
+                $message = "Choix 7 Droit et permissions de l'utilisateur sur un fichier"
+                Write-Log
                 Write-Host "TODO faire fonction Droit et permissions de l'utilisateur sur un fichier"
             }
             '8' {
                 #Fonction Recherche des événements dans le fichier log_evt.log pour un utilisateur
+                $message = "Choix 8 Recherche des événements dans le fichier log_evt.log pour un utilisateur"
+                Write-Log
                 Write-Host "TODO faire fonction Recherche des événements dans le fichier log_evt.log pour un utilisateur"
             }
             'r' {
                 #Retour au menu précédent
+                $message = "Retour menu précédent"
+                Write-Log
                 Write-Host "Back to the futur."
                 return 
             }
             Default {
+                $message = "Choix $choiceUMI invalide"
+                Write-Log
                 Write-Host "Ce choix n'est pas disponible, merci de saisir un chiffre entre 1 et 8 ou R.
                 " 
             }
@@ -200,10 +239,10 @@ function User_Menu_info {
 #####################################################
 # Fonction Liste des commandes utiliser par l'utilisateur
 # Auteur : Nico
-#  !!! a reprendre !!!
+#  !!! Impossible a utiliser les commandes ne s'enregistre pas dans la machine !!!
 #####################################################
 
-Invoke-Command -ScriptBlock { Get-Command } -Session $session
+#Invoke-Command -ScriptBlock { Get-History } -Session $session
 
 #####################################################
 # Fonction Droit et permissions de l'utilisateur sur un dossier
@@ -255,38 +294,56 @@ function User_Menu_Action {
         switch ($choiceUMA) {
             '1' {
                 #Fonction Création d'un compte local
+                $message = "Choix 1 Création d'un compte local"
+                Write-Log
                 Write-Host "TODO faire la fonction Création d'un compte local"
             }
             '2' {
                 #Fonction Changer le mot de passe d'un compte
+                $message = "Choix 2 Changer le mot de passe d'un compte"
+                Write-Log
                 Write-Host "TODO faire la fonction Changer le mot de passe d'un compte"
             }
             '3' {
                 #Fonction Suppression d'un compte utilisateur
+                $message = "Choix 3 Suppression d'un compte utilisateur"
+                Write-Log
                 Write-Host "TODO faire la fonction Suppression d'un compte utilisateur"
             }
             '4' {
                 #Fonction Désactivation d'un compte utilisateur local
+                $message = "Choix 4 Désactivation d'un compte utilisateur local"
+                Write-Log
                 Write-Host "TODO faire la fonction Désactivation d'un compte utilisateur local"
             }
             '5' {
                 #Fonction Ajout a un groupe d'administration
+                $message = "Choix 5 Ajout a un groupe d'administration"
+                Write-Log
                 Write-Host "TODO faire la fonction Ajout a un groupe d'administration"
             }
             '6' {
                 #Fonction Ajout a un groupe local
+                $message = "Choix 6 Ajout a un groupe local"
+                Write-Log
                 Write-Host "TODO faire la fonction Ajout a un groupe local"
             }
             '7' {
                 #Fonction Sortie d'un groupe local
+                $message = "Choix 7 Sortie d'un groupe local"
+                Write-Log
                 Write-Host "TODO faire la fonction Sortie d'un groupe local"
             }
             'r' {
                 #Retour au menu précédent
+                $message = "Retour menu précédent"
+                Write-Log
                 Write-Host "Back to the futur."
                 return 
             }
             Default {
+                $message = "Choix Choix $choiceUMA invalide"
+                Write-Log
                 Write-Host "Ce choix n'est pas disponible, merci de saisir un chiffre entre 1 et 7 ou R.
                 " 
             }
@@ -372,20 +429,28 @@ function Computer_Menu {
         switch ($choiceCM) {
             '1' {
                 #Choix information
+                $message = "Choix 1 information ordinateur"
+                Write-Log
                 Write-Host " "
                 Computer_Menu_Info
             }
             '2' {
                 #Choix Action
+                $message = "Choix 2 action ordinateur"
+                Write-Log
                 Write-Host " "
                 Computer_Menu_Action
             }
             'r' {
                 #Retour au menu précédent
+                $message = "Retour menu précédent"
+                Write-Log
                 Write-Host "Back to the futur."
                 return
             }
             default {
+                $message = "Choix $choiceCM invalide"
+                Write-Log
                 Write-Host "Ce choix n'est pas disponible, merci de saisir 1, 2 ou R.
                 "
             }
@@ -425,53 +490,50 @@ function Computer_Menu_Info {
     switch ($choiceCMI) {
         '1' {
             #Fonction Version de l'OS
+            
             Write-Host "TODO faire fonction Version de l'OS"
         }
         '2' {
             #Fonction Nombre de disque
-            Write-Host "TODO faire fonction Nombre de disque"
+            nbDisk
         }
         '3' {
-            #Fonction 
-            Write-Host "TODO faire fonction "
+            #Fonction Partition(nombres,nom,FS,taille)
+            partGet
         }
         '4' {
-            #Fonction Partition(nombres,nom,FS,taille)
-            Write-Host "TODO faire fonction Partition(nombres,nom,FS,taille)"
+            #Fonction Espace disque restant sur par partitions
+            spaceDisk
         }
         '5' {
-            #Fonction Espace disque restant sur par partitions
-            Write-Host "TODO faire fonction Espace disque restant sur par partitions"
-        }
-        '6' {
             #Fonction Nom et espace disque d'un dossier(nom de dossier demande)
             Write-Host "TODO faire fonction Nom et espace disque d'un dossier(nom de dossier demande)"
         }
-        '7' {
+        '6' {
             #Fonction Liste des lecteurs monte (disque,CD,etc...)
             Write-Host "TODO faire fonction Liste des lecteurs monte (disque,CD,etc...)"
         }
-        '8' {
+        '7' {
             #Fonction Liste des applications/paquets installees
             Write-Host "TODO faire fonction Liste des applications/paquets installees"
         }
-        '9' {
+        '8' {
             #Fonction Liste des services en cours d'execution
             Write-Host "TODO faire fonction Liste des services en cours d'execution"
         }
-        '10' {
+        '9' {
             #Fonction Liste des utilisateurs locaux
             Write-Host "TODO faire fonction Liste des utilisateurs locaux"
         }
-        '11' {
+        '10' {
             #Fonction Memoire RAM total
             Write-Host "TODO faire fonction Memoire RAM total"
         }
-        '12' {
+        '11' {
             #Fonction Utilisation de la RAM
             Write-Host "TODO faire fonction Utilisation de la RAM"
         }
-        '13' {
+        '12' {
             #Fonction Recherche des événements dans le fichier log_evt.log pour la machine
             Write-Host "TODO faire fonction Recherche des événements dans le fichier log_evt.log pour la machine"
         }
@@ -497,32 +559,51 @@ function Computer_Menu_Info {
 
 #####################################################
 # Fonction Nombre de disque
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-Invoke-Command -ScriptBlock { Get-Disk } -Session $session
+function nbDisk {
+    $message = "Affichage nombre de disques"
+    Write-Log
+    Write-Output "Nombre de disques" >> $info_log
+    Invoke-Command -ScriptBlock { Get-Disk | Select-Object disknumber } -Session $session | Tee-Object $info_log -Append
+    $message = "Fin affichage nombre de disques"
+    Write-Log
+}
 
 #####################################################
 # Fonction Partition(nombres,nom,FS,taille)
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-
+function partGet {
+    $message = "Affichage des informations de partition"
+    Write-Log
+    Write-Output "Informations de partition des disques">> $info_log
+    Get-Partition | Select-Object -Property PartitionNumber, DriveLetter, @{Name = "SizeGB"; Expression = { [math]::Round($_.Size / 1GB, 2) } }, FileSystem, DiskNumber | Tee-Object $info_log -Append
+    $message = "Fin affichage des informations de partition"
+    Write-Log
+}
 
 #####################################################
 # Fonction Espace disque restant sur par partitions
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
-
-Invoke-Command -ScriptBlock { Get-WmiObject -Class Win32_LogicalDisk | 
-    Select-Object -Property DeviceID, VolumeName, @{
-        label      = 'FreeSpace'
-        expression = { ($_.FreeSpace / 1GB).ToString('F2') }
-    } } -Session $session
-
+function spaceDisk {
+    $message = "Affichage de l'espace disque restant"
+    Write-Log
+    Write-Output "Informations espace disques restant" >> $info_log
+    Invoke-Command -ScriptBlock { Get-WmiObject -Class Win32_LogicalDisk | 
+        Select-Object -Property DeviceID, VolumeName, @{
+            label      = 'FreeSpace'
+            expression = { ($_.FreeSpace / 1GB).ToString('F2') }
+        } } -Session $session | Tee-Object $info_log -Append
+    $message = "Fin d'affichage nombre de disques"
+    Write-Log
+}
 #####################################################
 # Fonction Nom et espace disque d'un dossier(nom de dossier demandé)
 # Auteur : 
@@ -633,11 +714,11 @@ function Computer_Menu_Action {
             }
             '4' {
                 #Fonction Mise a jour du systeme
-                Write-Host "TODO faire la fonction Mise a jour du systeme"
+                Write-Host "NE FONCTIONNE PAS SANS ACTIVE DIRECTORY"
             }
             '5' {
                 #Fonction Creation de repertoire
-                Write-Host "TODO faire la fonction Creation de repertoire"
+                addDir
             }
             '6' {
                 #Fonction Modification de repertoire
@@ -645,27 +726,27 @@ function Computer_Menu_Action {
             }
             '7' {
                 #Fonction Suppression d'un repertoire
-                Write-Host "TODO faire la fonction Suppression d'un repertoire"
+                remDir
             }
             '8' {
                 #Fonction Prise de main a distance
-                Write-Host "TODO faire la fonction Prise de main a distance"
+                priseCLI
             }
             '9' {
                 #Fonction Activation du pare-feu
-                Set-NetFirewallProfile -profile * -Enabled true
+                fwActive
             }
             '10' {
                 #Fonction Désactivation du pare-feu
-                Set-NetFirewallProfile -profile * -Enabled False
+                fwDisactive
             }
             '11' {
                 #Fonction Installation de logiciel
-                Write-Host "TODO faire la fonction Installation de logiciel"
+                InstallSoftWare
             }
             '12' {
                 #Fonction Désinstallation de logiciel
-                Write-Host "TODO faire la fonction Désinstallation de logiciel"
+                UninstallSoftWare
             }
             '13' {
                 #Fonction Execution de script sur la machine distante
@@ -698,7 +779,7 @@ function Computer_Menu_Action {
 # 
 #####################################################
 
-Invoke-Command -ScriptBlock { Restart-Computer -force } -Session $session
+#Invoke-Command -ScriptBlock { Restart-Computer -force } -Session $session
 
 #####################################################
 # Fonction Verrouillage
@@ -710,19 +791,26 @@ Invoke-Command -ScriptBlock { Restart-Computer -force } -Session $session
 
 #####################################################
 # Fonction Mise a jour du système
-# Auteur :  
-#  !!! Faire des conditions pour l'installation de pswindowsupdate !!!
+# Auteur :  Nico
+#  !!! NE FONCTIONNE PAS !!!
 #####################################################
 
-Invoke-Command -ScriptBlock { Install-WindowsUpdate } -Session $session
+#Invoke-Command -ScriptBlock { Install-WindowsUpdate } -Session $session
 
 #####################################################
 # Fonction Creation de repertoire
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-Invoke-Command -ScriptBlock { New-Item -ItemType Directory "titi" } -Session $session
+function addDir {
+    $addDirr = Read-Host "Nom du Dossier a créer"
+    $message = "Début de la création du dossier $addDirr"
+    Write-Log
+    Invoke-Command -ScriptBlock { param($dirName) New-Item -ItemType Directory $dirName } -ArgumentList $addDirr -Session $session
+    $message = "Fin création de dossier"
+    Write-Log
+}
 
 #####################################################
 # Fonction Modification de repertoire
@@ -734,51 +822,99 @@ Invoke-Command -ScriptBlock { New-Item -ItemType Directory "titi" } -Session $se
 
 #####################################################
 # Fonction Suppression d'un repertoire
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-Invoke-Command -ScriptBlock { Remove-Item "toto" } -Session $session
+function remDir {
+    $remDirr = Read-Host "Nom du Dossier a supprimer"
+    $message = "Début de la suppression du dossier $remDirr"
+    Write-Log
+    Invoke-Command -ScriptBlock { param($dirrRem) Remove-Item $dirrRem } -ArgumentList $remDirr -Session $session
+    $message = "Fin de la suppression du dossier"
+    Write-Log
+}
 
 #####################################################
 # Fonction Prise de main a distance
-# Auteur : 
-# 
+# Auteur : Nico
+# !!! FAIT SORTIR DU SCRIPT !!!
 #####################################################
 
-Enter-PSSession $session
+function priseCLI {
+    $message = "Début prise en main a distance en CLI"
+    Write-Log 
+    $pricli = Read-Host "!!! Prendre la main a distance vous fera quitter le script, voulez-vous continuer ? o/n"
+    if ($pricli -eq "o") {
+        Enter-PSSession $session
+        $message = "Fin de prise en main a distance OK, sortie du script"
+        Write-Log
+        exit
+    }
+    else {
+        Write-Host "Prise en main annulé"
+        $message = "Prise en main annulé"
+        Write-Log
+    }
+}
 
 #####################################################
 # Fonction Activation du pare-feu
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-Invoke-Command -ScriptBlock { Set-NetFirewallProfile -profile * -Enabled True } -Session $session
+function fwActive {
+    $message = "Activation du Pare-feu de la machine distante"
+    Write-Log
+    Invoke-Command -ScriptBlock { Set-NetFirewallProfile -profile * -Enabled True } -Session $session
+
+}
+
 
 #####################################################
 # Fonction Désactivation du par-feu
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-Invoke-Command -ScriptBlock { Set-NetFirewallProfile -profile * -Enabled False } -Session $session
+function fwDisactive {
+    $message = "Désactivation du Pare-feu de la machine distante"
+    Write-Log
+    Invoke-Command -ScriptBlock { Set-NetFirewallProfile -profile * -Enabled False } -Session $session
+}
 
 #####################################################
 # Fonction Installation de logiciel
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-Invoke-Command -ScriptBlock { Install-Package -name pswindowsupdate -source psgallery } -Session $session
+function InstallSoftWare {
+    Write-Host "Le logiciel a installer doit etre dans le catalogue PSGallery"
+    $waresoft = Read-Host "Logiciel a installer"
+    $message = "Début installation du logiciel $waresoft"
+    Write-Log
+    Invoke-Command -ScriptBlock { param($sofwar)Install-Package -name $sofwar -force } -ArgumentList $waresoft -Session $session
+    $message = "Fin installation de logiciel"
+    Write-Log
+}
 
 #####################################################
 # Fonction Désinstallation de logiciel
-# Auteur : 
-# 
+# Auteur : Nico
+# !!! A REPRENDRE POUR AVOIR DES INFOS PLUS CLAIR !!!
 #####################################################
 
-
+function UninstallSoftWare {
+    Write-Host "Le logiciel a désinstaller doit etre dans le catalogue PSGallery"
+    $waresoft = Read-Host "Logiciel a désinstaller"
+    $message = "Début désinstallation du logiciel $waresoft"
+    Write-Log
+    Invoke-Command -ScriptBlock { param($sofwar)Uninstall-Package -name $sofwar -force } -ArgumentList $waresoft -Session $session
+    $message = "Fin désinstallation de logiciel"
+    Write-Log
+}
 
 #####################################################
 # Fonction Execution de script sur la machine distante
@@ -787,7 +923,61 @@ Invoke-Command -ScriptBlock { Install-Package -name pswindowsupdate -source psga
 #####################################################
 
 
-$session = New-PSSession -ComputerName 172.16.10.20 -Credential "wilder\Azerty1*"
+
+
+Write-Host "                                __ "
+Write-Host "                            ,;.'--'. "
+Write-Host '                             /"/=,=( '
+Write-Host "                             \(  __/ "
+Write-Host "                          ___/    (____ "
+Write-Host "                        .'     -  -    '. "
+Write-Host "                       /         v       \ "
+Write-Host "                    __/    ,     |    \   '-/'_ "
+Write-Host '                   {z, ,__/__,__/\__,_ )__(   z} '
+Write-Host "                    \>'   (            \_  --c/ "
+Write-Host "                      _.- \_      ,   / \_ "
+Write-Host "                      (       .______.'    '. "
+Write-Host "                       \   ,   \    ( __     ) "
+Write-Host "                        \   )-'-\__/-'  |   / "
+Write-Host "                         |  |          /  .' "
+Write-Host "                        /  ,)         (   \_ "
+Write-Host "                       oooO'           '--Ooo  "
+Write-Host " "
+Write-Host "                     ___ _   _ _ __ ___   ___  "
+Write-Host "                    / __| | | |  _   _ \ / _ \ "
+Write-Host "                    \__ \ |_| | | | | | | (_)|"
+Write-Host "                    |___/\__,_|_| |_| |_|\___/ "
+
+
+Write-Host "-----------------------------------------------------------------------
+Bonjour, bienvenue dans Sumo, merci d'entrer les identifiants à cibler.
+-----------------------------------------------------------------------"
+
+
+#Variable pour choisir l'ordinateur 
+$choix_users = Read-Host "Utilisateur a joindre"
+$choix_ordinateur = Read-Host "Ordinateur a joindre"
+$session = New-PSSession -ComputerName $choix_ordinateur -Credential $choix_users
+
+# Fonction pour la sauvegarde des actions fait avec le script
+function Write-Log {
+    Add-Content -Path C:\Windows\System32\LogFiles\log_evt.log -Value "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - $env:USERNAME - $choix_users - $choix_ordinateur - $message"
+}
+
+#Variables pour le Fichier Log des demandes d'information
+$Dates = Get-Date -Format "yyyyMMdd"
+$info_log = "C:\Users\Administrator\Documents\info_$choix_users_$dates.txt"
 
 
 Menu
+
+
+
+
+
+
+
+
+
+
+
