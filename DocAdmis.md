@@ -42,8 +42,6 @@ Une fois la clé copiée avec succès, vous devriez pouvoir vous connecter au se
 
 
 
-### Sur le Serveur Debian :
-
 
 
 ## FAQ
