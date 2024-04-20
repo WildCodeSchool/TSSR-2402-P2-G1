@@ -25,8 +25,8 @@ function Menu {
     Bonjour, bienvenue dans Sumo, comment puis-je vous aider ?
     ----------------------------------------------------------
     "
-    $message = "Début script Sumo"
-    Write-Log
+        $message = "Début script Sumo"
+        Write-Log
         Write-Host "1. Je veux cibler l'utilisateur."
         Write-Host "2. Je veux cibler l'ordinateur."
         Write-Host "Q. Je veux sortir du script.
@@ -185,7 +185,7 @@ function User_Menu_info {
                 #Fonction Recherche des événements dans le fichier log_evt.log pour un utilisateur
                 $message = "Choix 8 Recherche des événements dans le fichier log_evt.log pour un utilisateur"
                 Write-Log
-                Write-Host "TODO faire fonction Recherche des événements dans le fichier log_evt.log pour un utilisateur"
+                userEvtLog
             }
             'r' {
                 #Retour au menu précédent
@@ -262,11 +262,19 @@ function User_Menu_info {
 
 #####################################################
 # Fonction Recherche des événements dans le fichier log_evt.log pour un utilisateur
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
-
+function userEvtLog {
+    $userevtlogg = Read-Host "Quel utilisateur pour la consultation"
+    $message = "Consultation du fichier log_evt.log pour l'utilisateur $userevtlogg"
+    Write-Log
+    Write-Output "Consultation du fichier log_evt.log pour l'utilisateur $userevtlogg" >> $info_log
+    Get-Content C:\Windows\System32\LogFiles\log_evt.log | Select-String $userevtlogg | Tee-Object $info_log -Append
+    $message = "Fin consultation du fichier log_evt.log pour l'utilisateur"
+    Write-Log
+}
 
 #####################################################
 # Affiche le sous-menu d'action sur les utilisateurs.
@@ -490,59 +498,86 @@ function Computer_Menu_Info {
     switch ($choiceCMI) {
         '1' {
             #Fonction Version de l'OS
-            
+            $message = "Choix 1 Version de l'OS"
+            Write-Log
             Write-Host "TODO faire fonction Version de l'OS"
         }
         '2' {
             #Fonction Nombre de disque
+            $message = "Choix 2 Nombre de disque"
+            Write-Log
             nbDisk
         }
         '3' {
             #Fonction Partition(nombres,nom,FS,taille)
+            $message = "Choix 3 Partition(nombres,nom,FS,taille)"
+            Write-Log
             partGet
         }
         '4' {
             #Fonction Espace disque restant sur par partitions
+            $message = "Choix 4 Espace disque restant sur par partitions"
+            Write-Log
             spaceDisk
         }
         '5' {
             #Fonction Nom et espace disque d'un dossier(nom de dossier demande)
+            $message = "Choix 5 Nom et espace disque d'un dossier"
+            Write-Log
             Write-Host "TODO faire fonction Nom et espace disque d'un dossier(nom de dossier demande)"
         }
         '6' {
             #Fonction Liste des lecteurs monte (disque,CD,etc...)
+            $message = "Choix 6 Liste des lecteurs monte"
+            Write-Log
             Write-Host "TODO faire fonction Liste des lecteurs monte (disque,CD,etc...)"
         }
         '7' {
             #Fonction Liste des applications/paquets installees
+            $message = "Choix 7 Liste des applications/paquets installees"
+            Write-Log
             Write-Host "TODO faire fonction Liste des applications/paquets installees"
         }
         '8' {
             #Fonction Liste des services en cours d'execution
+            $message = "Choix 8 Liste des services en cours d'execution"
+            Write-Log
             Write-Host "TODO faire fonction Liste des services en cours d'execution"
         }
         '9' {
             #Fonction Liste des utilisateurs locaux
+            $message = "Choix 9 Liste des utilisateurs locaux"
+            Write-Log
             Write-Host "TODO faire fonction Liste des utilisateurs locaux"
         }
         '10' {
             #Fonction Memoire RAM total
+            $message = "Choix 10 Memoire RAM total"
+            Write-Log
             Write-Host "TODO faire fonction Memoire RAM total"
         }
         '11' {
             #Fonction Utilisation de la RAM
+            $message = "Choix 11 Utilisation de la RAM"
+            Write-Log
             Write-Host "TODO faire fonction Utilisation de la RAM"
         }
         '12' {
             #Fonction Recherche des événements dans le fichier log_evt.log pour la machine
-            Write-Host "TODO faire fonction Recherche des événements dans le fichier log_evt.log pour la machine"
+            $message = "Choix 12 Recherche des événements dans le fichier log_evt.log pour la machine"
+            Write-Log
+            compEvtLog
         }
         'R' {
             #Fonction Retour au menu precedent
+            $message = "Retour menu précédent"
+            Write-Log
             Write-Host "Back to the futur."
             return
         }
         Default { 
+            $message = "Choix $choiceCMI invalide"
+            Write-Log
             Write-Host "Ce choix n'est pas disponible, merci de saisir un chiffre entre 1 et 12 ou R.
             "
         }
@@ -666,7 +701,15 @@ function spaceDisk {
 # 
 #####################################################
 
-
+function compEvtLog {
+    $compevtlogg = Read-Host "Ip de l'ordinateur pour la consultation"
+    $message = "Consultation du fichier log_evt.log pour l'ordinateur $compevtlogg"
+    Write-Log
+    Write-Output "Consultation du fichier log_evt.log pour l'ordinateur $compevtlogg" >> $info_log
+    Get-Content C:\Windows\System32\LogFiles\log_evt.log | Select-String $compevtlogg | Tee-Object $info_log -Append
+    $message = "Fin consultation du fichier log_evt.log pour l'ordinateur"
+    Write-Log
+}
 
 #####################################################
 # Affiche le sous-menu d'action sur les ordinateurs.
@@ -702,62 +745,92 @@ function Computer_Menu_Action {
         switch ($choiceCMA) {
             '1' {
                 #Fonction Arret
+                $message = "Choix 1 Arret"
+                Write-Log
                 Write-Host "TODO faire la fonction Arret"
             }
             '2' {
                 #Fonction Redemarrage
+                $message = "Choix 2 Redemarrage"
+                Write-Log
                 Write-Host "TODO faire la fonction Redemarrage"
             }
             '3' {
                 #Fonction Verrouillage
+                $message = "Choix 3 Verrouillage"
+                Write-Log
                 Write-Host "TODO faire la fonction Verrouillage"
             }
             '4' {
                 #Fonction Mise a jour du systeme
+                $message = "Choix 4 Mise a jour du systeme"
+                Write-Log
                 Write-Host "NE FONCTIONNE PAS SANS ACTIVE DIRECTORY"
             }
             '5' {
                 #Fonction Creation de repertoire
+                $message = "Choix 5 Creation de repertoire"
+                Write-Log
                 addDir
             }
             '6' {
                 #Fonction Modification de repertoire
+                $message = "Choix 6 Modification de repertoire"
+                Write-Log
                 Write-Host "TODO faire la fonction Modification de repertoire"
             }
             '7' {
                 #Fonction Suppression d'un repertoire
+                $message = "Choix 7 Suppression d'un repertoire"
+                Write-Log
                 remDir
             }
             '8' {
                 #Fonction Prise de main a distance
+                $message = "Choix 8 Prise de main a distance"
+                Write-Log
                 priseCLI
             }
             '9' {
                 #Fonction Activation du pare-feu
+                $message = "Choix 9 Activation du pare-feu"
+                Write-Log
                 fwActive
             }
             '10' {
                 #Fonction Désactivation du pare-feu
+                $message = "Choix 10 Désactivation du pare-feu"
+                Write-Log
                 fwDisactive
             }
             '11' {
                 #Fonction Installation de logiciel
+                $message = "Choix 11 Installation de logiciel"
+                Write-Log
                 InstallSoftWare
             }
             '12' {
                 #Fonction Désinstallation de logiciel
+                $message = "Choix 12 Désinstallation de logiciel"
+                Write-Log
                 UninstallSoftWare
             }
             '13' {
                 #Fonction Execution de script sur la machine distante
+                $message = "Choix 13 Execution de script sur la machine distante"
+                Write-Log
                 Write-Host "TODO faire la fonction Execution de script sur la machine distante"
             }
             'R' {
                 #Fonction Retour au menu precedent
+                $message = "Choix Retour menu précédent"
+                Write-Log
                 Write-Host "Back to the futur."
                 return
             }
             Default { 
+                $message = "Choix $choiceCMA invalide "
+                Write-Log
                 Write-Host "Ce choix n'est pas disponible, merci de saisir un chiffre entre 1 et 13 ou R.
                 "
             }
