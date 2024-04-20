@@ -317,7 +317,16 @@ function User_Menu_Action {
 function ChangePassword () {
     $nomUtilisateur = Read-Host "Nommez l'utilisateur"
     $nouveauMotDePasse = Read-Host "Veuillez entrer le nouveaux mot de passe" -AsSecureString
-    Invoke-Command -ScriptBlock { param($nomUtilisateur, $nouveauMotDePasse) Set-LocalUser -Name $nomUtilisateur -Password $nouveauMotDePasse } -ArgumentList $nomUtilisateur, $nouveauMotDePasse -Session $session
+    $confirm = Read-Host "Voulez vous vraiment changer le mot de passe de $nomUtilisateur ? Taper [o] pour confirmer"
+    if ($confirm -eq "o") {
+        then
+        Invoke-Command -ScriptBlock { param($nomUtilisateur, $nouveauMotDePasse) Set-LocalUser -Name $nomUtilisateur -Password $nouveauMotDePasse } -ArgumentList $nomUtilisateur, $nouveauMotDePasse -Session $session
+        Write-Host "Le mot de passe de $nomUtilisateur à bien été modifié" -ForegroundColor Green
+        else
+        Write-Host " Erreur " -ForegroundColor Red 
+    }
+    $message = "Le mot de passe de $nomUtilisateur à bien été modifié"
+    Write-Log $message
 }
 #####################################################
 # Fonction Suppression d'un compte utilisateur
@@ -325,8 +334,19 @@ function ChangePassword () {
 # 
 #####################################################
 function DeleteUser () {
+
     $nomUtilisateur = Read-Host "Nommez l'utilisateur"
-    Invoke-Command -ScriptBlock { param( $nomUtilisateur) Remove-LocalUser -Name $nomUtilisateur } -ArgumentList $nomUtilisateur -Session $session
+    $confirm = Read-Host "Voulez vous vraiment supprimer $nomUtilisateur ? Taper [o] pour oui "
+    if ($confirm -eq "o") {
+        Then 
+        Invoke-Command -ScriptBlock { param( $nomUtilisateur) Remove-LocalUser -Name $nomUtilisateur } -ArgumentList $nomUtilisateur -Session $session
+        Write-Host "$nomUtilisateur a bien été supprimé" -ForegroundColor Green
+        
+        Else 
+        Write-Host " Erreur " -ForegroundColor Red 
+    }
+    $message = "$nomUtilisateur a bien été supprimer"
+    Write-Log $message
 }
 
 #####################################################
@@ -336,7 +356,16 @@ function DeleteUser () {
 #####################################################
 Function DisableUser () {
     $nomUtilisateur = Read-Host "Nommez l'utilisateur"
-    Invoke-Command -ScriptBlock { param($nameUser) Disable-User -Name $nameUser } -ArgumentList $nomUtilisateur -Session $session 
+    $confirm = Read-Host "Voulez vous vraiment désactiver $nomUtilisateur ? Taper [o] pour confirmer"
+    if ($confirm -eq "o") {
+        then
+        Invoke-Command -ScriptBlock { param($nameUser) Disable-User -Name $nameUser } -ArgumentList $nomUtilisateur -Session $session 
+        Write-Host "$nomUtilisateur à bie nété désactivé" -ForegroundColor Green
+        else
+        Write-Host " Erreur " -ForegroundColor Red 
+    }
+    $message = "$nomUtilisateur a bien été désactivé"
+    Write-Log $message
 }
 
 #####################################################
@@ -346,10 +375,17 @@ Function DisableUser () {
 #####################################################
 Function AddAdminGroup () {
     $nomUtilisateur = Read-Host "Nommez l'utilisateur"
-    Invoke-Command -ScriptBlock { param($userName) Add-LocalGroupMember -Group Administrateurs -Member $userName
-    } -ArgumentList $nomUtilisateur -Session $session
+    $confirm = Read-Host "Voulez vous vraiment ajouter $nomUtilisateur au groupe d'administration? Taper [o] pour confirmer."
+    if ($confirm -eq "o") {
+        then
+        Invoke-Command -ScriptBlock { param($userName) Add-LocalGroupMember -Group Administrateurs -Member $userName } -ArgumentList $nomUtilisateur -Session $session
+        Write-Host "$nomUtilisateur à bien été ajouter au groupe administrateur" -ForegroundColor Green
+        else
+        Write-Host " Erreur " -ForegroundColor Red 
+    }
+    $message = "$nomUtilisateur a bien été ajouter au groupe administrateur"
+    Write-Log $message
 }
-
 #####################################################
 # Fonction Ajout a un groupe local
 # Auteur : 
@@ -358,8 +394,35 @@ Function AddAdminGroup () {
 Function AddLocalGroup () {
     $nomUtilisateur = Read-Host "Nommez l'utilisateur"
     $localGroup = Read-Host "Nommer dans quel groupe voulez vous ajouter $nomUtilisateur"
-    Invoke-Command -ScriptBlock { param($localGroup, $nomUtilisateur) Add-LocalGroupMember -Group $localGroup -Member $nomUtilisateur
-    } -ArgumentList $localGroup, $nomUtilisateur -Session $session
+    $confirm = Read-Host "Voulez vous vraiment ajouter $nomUtilisateur a $localGroup ? Taper [o] pour confirmer."
+    if ($confirm -eq "o") {
+        then
+        Invoke-Command -ScriptBlock { param($localGroup, $nomUtilisateur) Add-LocalGroupMember -Group $localGroup -Member $nomUtilisateur } -ArgumentList $localGroup, $nomUtilisateur -Session $session
+        Write-Host "$nomUtilisateur à bien été ajouté au groupe $localGroup " -ForegroundColor Green
+        else
+        Write-Host "Erreur" -ForegroundColor Red 
+    }
+    $message = "$nomUtilisateur a bien été ajouter au groupe $localGroup"
+    Write-Log $message
+}
+#####################################################
+# Fonction Sortie d'un groupe local
+# Auteur : 
+# 
+#####################################################
+Function RemoveLocalGroup () {
+    $nomUtilisateur = Read-Host "Nommez l'utilisateur"
+    $nomGroup = Read-Host "De quel groupe voulez vous supprimer $nomUtilisateur ? "
+    $confirm = Read-Host "Voulez vous vraiment supprimer $nomUtilisateur du groupe nomGroup ? Taper [o] pour confirmer."
+    if ($confirm -eq "o") {
+        then
+        Invoke-Command -ScriptBlock { param($nomGroup, $nomUtilisateur) Remove-LocalGroupMember -Group $nomGroup -Member $nomUtilisateur } -ArgumentList $nomGroup, $nomUtilisateur -Session $session
+        Write-Host "$nomUtilisateur à bie nété enlever du groupe $nomGroup" -ForegroundColor Green
+        else
+        Write-Host "Erreur" -ForegroundColor Red 
+    }
+    $message = "$nomUtilisateur a bien été enlever du groupe $nomGroup"
+    Write-Log $message
 }
 #####################################################
 # Fonction Sortie d'un groupe local
