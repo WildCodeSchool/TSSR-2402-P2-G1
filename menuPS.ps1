@@ -697,7 +697,7 @@ function spaceDisk {
 
 #####################################################
 # Fonction Recherche des événements dans le fichier log_evt.log pour la machine
-# Auteur : 
+# Auteur : Nico
 # 
 #####################################################
 
@@ -747,7 +747,7 @@ function Computer_Menu_Action {
                 #Fonction Arret
                 $message = "Choix 1 Arret"
                 Write-Log
-                Write-Host "TODO faire la fonction Arret"
+                Arreter-Client
             }
             '2' {
                 #Fonction Redemarrage
@@ -759,7 +759,7 @@ function Computer_Menu_Action {
                 #Fonction Verrouillage
                 $message = "Choix 3 Verrouillage"
                 Write-Log
-                Write-Host "TODO faire la fonction Verrouillage"
+                Verrouiller-Client
             }
             '4' {
                 #Fonction Mise a jour du systeme
@@ -777,7 +777,7 @@ function Computer_Menu_Action {
                 #Fonction Modification de repertoire
                 $message = "Choix 6 Modification de repertoire"
                 Write-Log
-                Write-Host "TODO faire la fonction Modification de repertoire"
+                Modifier-NomRepertoireDistant
             }
             '7' {
                 #Fonction Suppression d'un repertoire
@@ -840,11 +840,15 @@ function Computer_Menu_Action {
 
 #####################################################
 # Fonction Arrêt
-# Auteur : 
+# Auteur : Ahmed Nico
 # 
 #####################################################
 
-
+function Arreter-Client {
+    $message = "Arret de la machine"
+    Write-Log
+    Invoke-Command -ScriptBlock { shutdown /s /f /t 0 } -Session $session
+}
 
 #####################################################
 # Fonction Redémarrage
@@ -852,15 +856,18 @@ function Computer_Menu_Action {
 # 
 #####################################################
 
-#Invoke-Command -ScriptBlock { Restart-Computer -force } -Session $session
 
 #####################################################
 # Fonction Verrouillage
-# Auteur : 
+# Auteur : Ahmed Nico
 # 
 #####################################################
 
-
+function Verrouiller-Client {
+    $message = "Verrouillage session distante"
+    Write-Log
+    Invoke-Command -ScriptBlock { logoff console } -Session $session
+}
 
 #####################################################
 # Fonction Mise a jour du système
@@ -887,10 +894,38 @@ function addDir {
 
 #####################################################
 # Fonction Modification de repertoire
-# Auteur : 
+# Auteur : Ahmed Nico
 # 
 #####################################################
 
+function Modifier-NomRepertoireDistant {
+
+    $namedir = Read-Host "Nom et chemin complet du dossier a modifier"
+    $newnamedir = Read-Host "Chemin complet et nouveau nom du dossier a modifier"
+    $message = "Modification du dossier $namedir avec le nouveau nom $newnamedir"
+    Write-Log
+    # Vérifiez si le dossier existe
+    if (Invoke-Command -ScriptBlock { param ($namedir)Test-Path $namedir -PathType Container } -ArgumentList $namedir -Session $session) {
+        Invoke-Command -ScriptBlock { param ($namedir, $newnamedir) Rename-Item -Path $namedir -NewName $newnamedir } -ArgumentList $namedir, $newnamedir -Session $session
+        if (Invoke-Command -ScriptBlock { param ($newnamedir)Test-Path $newnamedir -PathType Container } -ArgumentList $newnamedir -Session $session) {
+            Write-Output "Changement de nom de dossier OK !"
+            $message = "Changement de nom de dossier OK !"
+            Write-Log
+        }
+        else { 
+            Write-Output "Echec de changement de nom" 
+            $message = "Echec de changement de nom"
+            Write-Log
+        }
+    }
+    else {
+        Write-Output "Le dossier $namedir n'existe pas"
+        $message = "Le dossier $namedir n'existe pas"
+        Write-Log
+    }
+    $message = "Fin modification du nom de dossier"
+    Write-Log
+}
 
 
 #####################################################
