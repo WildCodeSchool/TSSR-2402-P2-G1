@@ -816,8 +816,8 @@ function partGet {
     $message = "Affichage des informations de partition"
     Write-Log
     Write-Output "Informations de partition des disques">> $info_log
-    Invoke-Command -ScriptBlock { Get-Partition | Select-Object -Property PartitionNumber, DriveLetter, @{Name = "SizeGB"; Expression = { [math]::Round($_.Size / 1GB, 2) } } }, FileSystem, DiskNumber -Session $session
-    Invoke-Command -ScriptBlock { Get-Partition | Select-Object -Property PartitionNumber, DriveLetter, @{Name = "SizeGB"; Expression = { [math]::Round($_.Size / 1GB, 2) } } }, FileSystem, DiskNumber -Session $session >> $info_log
+    Invoke-Command -ScriptBlock { Get-Partition | Select-Object -Property PartitionNumber, DriveLetter, @{Name = "SizeGB"; Expression = { [math]::Round($_.Size / 1GB, 2) } } , FileSystem, DiskNumber }-Session $session
+    Invoke-Command -ScriptBlock { Get-Partition | Select-Object -Property PartitionNumber, DriveLetter, @{Name = "SizeGB"; Expression = { [math]::Round($_.Size / 1GB, 2) } } , FileSystem, DiskNumber }-Session $session >> $info_log
 
     $message = "Fin affichage des informations de partition"
     Write-Log
