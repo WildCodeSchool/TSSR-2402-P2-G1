@@ -71,6 +71,8 @@
 
 Pour utiliser SUMO, une fois le script lancé il vous suffit de naviguer dans les menu en tapant le numero correspondant aux choix que voulez voulez effectuer.
 
+au lancement du script il vous seras demander d'entrer un nom d'utilisateur et de cibler une machine, pour viser la machine il faudra entrer l'adresse IP de la machine distante
+
 Par exemple si vous voulez desactiver le par feu vous devrez effectuer ces action :
 1. taper 2 pour cibler un ordinateur
 2. taper 2 pour acceder aux actions a effectuer
@@ -78,8 +80,9 @@ Par exemple si vous voulez desactiver le par feu vous devrez effectuer ces actio
 
 ## Utilisation avancée
 
+vous pouvez retrouver 2 fichiers d'information
+- info_utilisateurs_dates.txt qui enrengistre toutes les informations que vous avez demander qui ce trouve dans 
+**C:\Users\Administrator\Documents** pour windows et pour Linux il ce trouve dans **/home/Documents/**
 
-
-
-
-## FAQ
+- log_evt.log qui enrengistre toutes les activité comme les actions et demande d'information qui
+ont été effectué qui ce trouve dans **C:\Windows\System32\LogFiles** et pour linux il ce trouve dans **/var/log** 
