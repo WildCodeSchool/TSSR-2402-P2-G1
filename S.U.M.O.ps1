@@ -510,7 +510,6 @@ function DeleteUser () {
     $nomUtilisateur = Read-Host "Nommez l'utilisateur"
     $confirm = Read-Host "Voulez vous vraiment supprimer $nomUtilisateur ? Taper [o] pour oui "
     if ($confirm -eq "o") {
-        Then 
         Invoke-Command -ScriptBlock { param( $nomUtilisateur) Remove-LocalUser -Name $nomUtilisateur } -ArgumentList $nomUtilisateur -Session $session
         Write-Host "$nomUtilisateur a bien été supprimé" -ForegroundColor Green
         }
@@ -531,7 +530,6 @@ Function DisableUser () {
     $nomUtilisateur = Read-Host "Nommez l'utilisateur"
     $confirm = Read-Host "Voulez vous vraiment désactiver $nomUtilisateur ? Taper [o] pour confirmer"
     if ($confirm -eq "o") {
-        then
         Invoke-Command -ScriptBlock { param($nameUser) Disable-User -Name $nameUser } -ArgumentList $nomUtilisateur -Session $session 
         Write-Host "$nomUtilisateur à bie nété désactivé" -ForegroundColor Green
         }
@@ -552,7 +550,6 @@ Function AddAdminGroup () {
     $nomUtilisateur = Read-Host "Nommez l'utilisateur"
     $confirm = Read-Host "Voulez vous vraiment ajouter $nomUtilisateur au groupe d'administration? Taper [o] pour confirmer."
     if ($confirm -eq "o") {
-        then
         Invoke-Command -ScriptBlock { param($userName) Add-LocalGroupMember -Group Administrateurs -Member $userName } -ArgumentList $nomUtilisateur -Session $session
         Write-Host "$nomUtilisateur à bien été ajouter au groupe administrateur" -ForegroundColor Green
         }
