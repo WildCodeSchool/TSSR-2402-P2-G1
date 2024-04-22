@@ -219,7 +219,7 @@ function Lastconnexion {
     # Recherche la derniere connexion de l'utilisateur
     Write-Output "Date de la derniere connexion de l'utilisateur $lastuser" >> $info_log
     $lastLogin = Invoke-Command -ScriptBlock { param ($lastuser) Get-WinEvent -FilterHashtable @{ LogName ='Security'; ID = 4624 } -MaxEvents 1000 |  Where-Object { $_.Properties[5].Value -eq "$lastuser" } | Sort-Object TimeCreated -Descending | Select-Object -First 1} -argumentlist $lastuser -Session $session | Tee-Object $info_log -Append
-    $message "Date de la derniere connexion de l'utilisateur $lastuser"
+    $message = "Date de la derniere connexion de l'utilisateur $lastuser"
     Write-Log
         
     if ($lastLogin) {
