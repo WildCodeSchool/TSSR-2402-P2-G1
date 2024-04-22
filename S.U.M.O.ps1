@@ -212,21 +212,21 @@ function User_Menu_info {
 
 function Lastconnexion {
 
-    $message = "Date de la derniere connexion de l'utilisateur $lastuser"
-    Write-Log
+    
     # Demande le nom de l'utilisateur à rechercher
     $lastuser = Read-Host "Nom utilisateur"
     
     # Recherche la derniere connexion de l'utilisateur
-    $lastLogin = Invoke-Command -ScriptBlock { param ($lastuser) Get-WinEvent -FilterHashtable @{LogName = 'Security'; ID = 4624 } -MaxEvents 1000 |  Where-Object { $_.Properties[5].Value -eq "$lastuser" } | Sort-Object TimeCreated -Descending | Select-Object -First 1 } -argumentlist $lastuser -Session $session | Tee-Object $info_log -Append
-    
+    Write-Output "Date de la derniere connexion de l'utilisateur $lastuser" >> $info_log
+    $lastLogin = Invoke-Command -ScriptBlock { param ($lastuser) Get-WinEvent -FilterHashtable @{ LogName ='Security'; ID = 4624 } -MaxEvents 1000 |  Where-Object { $_.Properties[5].Value -eq "$lastuser" } | Sort-Object TimeCreated -Descending | Select-Object -First 1} -argumentlist $lastuser -Session $session | Tee-Object $info_log -Append
+    $message "Date de la derniere connexion de l'utilisateur $lastuser"
+    Write-Log
         
     if ($lastLogin) {
-        # Affiche la dernière date de connexion
-        Write-output "Dernière connexion de l'utilisateur $lastuser : $($lastLogin.TimeCreated)"
-    }
-    else {
-        Write-output "Aucune connexion trouvé pour l'utilisateur $lastuser`."
+    # Affiche la dernière date de connexion
+    Write-output "Dernière connexion de l'utilisateur $lastuser : $($lastLogin.TimeCreated)"
+    } else {
+    Write-output "Aucune connexion trouvé pour l'utilisateur $lastuser."
     }
 
 }
@@ -239,15 +239,18 @@ function Lastconnexion {
 
 function last_change_password() {
     $user = Read-Host "De quelle utilisateur voulez vous savoir a quelle date a eus lieux le dernier changement de mot passe"
-    if (Invoke-Command -scriptBlock { param($user) Get-LocalUser -Name $user 2> $null } -ArgumentList $user -Session $session) {
+    if(Invoke-Command -scriptBlock { param($user) Get-LocalUser -Name $user 2> $null } -ArgumentList $user -Session $session)  
+    {   
+        Write-Output "Date de derniere modification du mot de passe de l'utilisateur $user" >> $info_log
         Invoke-Command -scriptBlock { param($user) (Get-LocalUser -Name $user).PasswordLastSet } -ArgumentList $user -Session $session | Tee-Object $info_log -Append
         $message = "affichage de la derniere fois que $nomUtilisateur a changer de mot de passe"
-        Write-Log $mesage
+        Write-Log $message
     }
-    else {
+    else
+    {
         write-host "L'utilisateur n'existe pas"
         $message = "affichage de la derniere fois que $nomUtilisateur a changer de mot de passe ECHEC car l'utilisateur n'existe pas"
-        Write-Log $mesage
+        Write-Log $message
     }
     
 }
@@ -260,11 +263,10 @@ function last_change_password() {
 
 function sesionactive {
 
-    $message = "Affichage des sessions active"
-    Write-Log
-    $session = New-PSSession -ComputerName "172.16.10.20" -Credential "wilder"
     Write-Output "Liste des session actives" >> $info_log
     Invoke-Command { query session } -Session $session | Tee-Object $info_log -Append
+    $message = "Affichage des sessions active"
+    Write-Log
     
 }
 
@@ -275,14 +277,19 @@ function sesionactive {
 # 
 #####################################################
 
-function user_group() {
+function user_group()
+{
     $username_user = Read-Host "quelle utilisateur voulez vous cibler? "
-    if (Invoke-Command -ScriptBlock { param($username) Get-LocalUser -Name $username 2> $null } -ArgumentList $username_user -Session $session) {
-        Invoke-Command -ScriptBlock { param($username) (net user $username)[22, 23] } -ArgumentList $username_user -Session $session | Tee-Object $info_log -Append
+    if (Invoke-Command -ScriptBlock { param($username) Get-LocalUser -Name $username 2> $null } -ArgumentList $username_user -Session $session)  
+    {
+        Write-Output "Liste des groupes auxquels appartient l'utilisateur $username_user" >> $info_log
+        Invoke-Command -ScriptBlock { param($username) (net user $username)[22,23] } -ArgumentList $username_user -Session $session | Tee-Object $info_log -Append
         $message = "affichage a quelle groupe appaartient l'utilisateur"
-        Write-Log $mesage  
+        Write-Log $mesage 
+        
     }
-    else {
+    else
+    {
         write-host "L'utilisateur n'existe pas"
         $message = "impossible de savoir a quelle groupe appartient l'utilisateur"
         Write-Log $mesage
@@ -313,7 +320,7 @@ function Droitsdossier {
 
     Write-Output "Droits de l'utilisateur $droituser sur le dossier $droitdoss " >> $info_log
     
-    Invoke-Command -ScriptBlock { param ($droitdoss, $droituser) Get-Acl -Path $droitdoss | Select-Object -ExpandProperty Access | Where-Object { $_.IdentityReference -match "$droituser" } } -argumentlist $droitdoss, $droituser -Session $session | Tee-Object $info_log -Append
+    Invoke-Command -ScriptBlock { param ($droitdoss,$droituser) Get-Acl -Path $droitdoss | Select-Object -ExpandProperty Access | Where-Object { $_.IdentityReference -match "$droituser" } } -argumentlist $droitdoss,$droituser -Session $session | Tee-Object $info_log -Append
 
 }
 
@@ -332,8 +339,7 @@ function Filedroit {
     
     Write-Output "Droits de l'utilisateur $fileuser sur le dossier $droitfile " >> $info_log
 
-    Invoke-Command -ScriptBlock { param ($droitfile, $fileuser) Get-Acl -Path $droitfile | Where-Object { $_.IdentityReference -like "*$droitfile*" } } -argumentlist $droitfile, $fileuser -Session $session | Tee-Object $info_log -Append
-    
+    Invoke-Command -ScriptBlock { param ($droitfile,$fileuser) Get-Acl -Path $droitfile | Select-Object -ExpandProperty Access | Where-Object { $_.IdentityReference -match "$fileuser" } } -argumentlist $droitfile,$fileuser -Session $session | Tee-Object $info_log -Append
 }
 
 
@@ -445,15 +451,15 @@ function User_Menu_Action {
 
 function add_user {
     $username_user = Read-Host "Quel utilisateur voulez-vous ajouter?"
-    if (Invoke-Command -ScriptBlock { param($username) Get-LocalUser -Name $username 2> $null } -ArgumentList $username_user -Session $session) {
+    if (Invoke-Command -ScriptBlock {param($username) Get-LocalUser -Name $username 2> $null} -ArgumentList $username_user -Session $session) {
         Write-Host "L'utilisateur existe déjà."
         $message = "l'utilisateur $username_user ne peut pas etre creer car il exite deja"
         Write-Log $mesage
     }
     else {
         $password_user = Read-Host -AsSecureString "Choisissez un mot de passe pour le compte"
-        Invoke-Command -ScriptBlock { param($username, $password) New-LocalUser -Name $username -Password $password 2> $null } -ArgumentList $username_user, $password_user -Session $session
-        if (Invoke-Command -ScriptBlock { param($username) Get-LocalUser -Name $username } -ArgumentList $username_user -Session $session) {
+        Invoke-Command -ScriptBlock {param($username, $password) New-LocalUser -Name $username -Password $password 2> $null} -ArgumentList $username_user, $password_user -Session $session
+        if (Invoke-Command -ScriptBlock {param($username) Get-LocalUser -Name $username} -ArgumentList $username_user -Session $session) {
             Write-Host "L'utilisateur a bien été créé."
             $message = "l'Utilisateur $username_user a été creer"
             Write-Log $mesage
@@ -472,10 +478,10 @@ function ChangePassword () {
     $nouveauMotDePasse = Read-Host "Veuillez entrer le nouveaux mot de passe" -AsSecureString
     $confirm = Read-Host "Voulez vous vraiment changer le mot de passe de $nomUtilisateur ? Taper [o] pour confirmer"
     if ($confirm -eq "o") {
-        then
         Invoke-Command -ScriptBlock { param($nomUtilisateur, $nouveauMotDePasse) Set-LocalUser -Name $nomUtilisateur -Password $nouveauMotDePasse } -ArgumentList $nomUtilisateur, $nouveauMotDePasse -Session $session
         Write-Host "Le mot de passe de $nomUtilisateur à bien été modifié" -ForegroundColor Green
-        else
+        }
+        else{
         Write-Host " Erreur " -ForegroundColor Red 
     }
     $message = "Le mot de passe de $nomUtilisateur à bien été modifié"
@@ -496,8 +502,8 @@ function DeleteUser () {
         Then 
         Invoke-Command -ScriptBlock { param( $nomUtilisateur) Remove-LocalUser -Name $nomUtilisateur } -ArgumentList $nomUtilisateur -Session $session
         Write-Host "$nomUtilisateur a bien été supprimé" -ForegroundColor Green
-        
-        Else 
+        }
+        Else { 
         Write-Host " Erreur " -ForegroundColor Red 
     }
     $message = "$nomUtilisateur a bien été supprimer"
@@ -517,7 +523,8 @@ Function DisableUser () {
         then
         Invoke-Command -ScriptBlock { param($nameUser) Disable-User -Name $nameUser } -ArgumentList $nomUtilisateur -Session $session 
         Write-Host "$nomUtilisateur à bie nété désactivé" -ForegroundColor Green
-        else
+        }
+        else {
         Write-Host " Erreur " -ForegroundColor Red 
     }
     $message = "$nomUtilisateur a bien été désactivé"
@@ -537,7 +544,8 @@ Function AddAdminGroup () {
         then
         Invoke-Command -ScriptBlock { param($userName) Add-LocalGroupMember -Group Administrateurs -Member $userName } -ArgumentList $nomUtilisateur -Session $session
         Write-Host "$nomUtilisateur à bien été ajouter au groupe administrateur" -ForegroundColor Green
-        else
+        }
+        else {
         Write-Host " Erreur " -ForegroundColor Red 
     }
     $message = "$nomUtilisateur a bien été ajouter au groupe administrateur"
@@ -555,10 +563,10 @@ Function AddLocalGroup () {
     $localGroup = Read-Host "Nommer dans quel groupe voulez vous ajouter $nomUtilisateur"
     $confirm = Read-Host "Voulez vous vraiment ajouter $nomUtilisateur a $localGroup ? Taper [o] pour confirmer."
     if ($confirm -eq "o") {
-        then
         Invoke-Command -ScriptBlock { param($localGroup, $nomUtilisateur) Add-LocalGroupMember -Group $localGroup -Member $nomUtilisateur } -ArgumentList $localGroup, $nomUtilisateur -Session $session
         Write-Host "$nomUtilisateur à bien été ajouté au groupe $localGroup " -ForegroundColor Green
-        else
+        }
+        else {
         Write-Host "Erreur" -ForegroundColor Red 
     }
     $message = "$nomUtilisateur a bien été ajouter au groupe $localGroup"
@@ -579,7 +587,8 @@ Function RemoveLocalGroup () {
         then
         Invoke-Command -ScriptBlock { param($nomGroup, $nomUtilisateur) Remove-LocalGroupMember -Group $nomGroup -Member $nomUtilisateur } -ArgumentList $nomGroup, $nomUtilisateur -Session $session
         Write-Host "$nomUtilisateur à bie nété enlever du groupe $nomGroup" -ForegroundColor Green
-        else
+        }
+        else {
         Write-Host "Erreur" -ForegroundColor Red 
     }
     $message = "$nomUtilisateur a bien été enlever du groupe $nomGroup"
@@ -760,7 +769,9 @@ function Computer_Menu_Info {
 # 
 #####################################################
 
-function os_version() {
+function os_version()
+{
+    Write-Output "Version le l'OS" >> $info_log
     Invoke-Command -ScriptBlock { Get-WmiObject Win32_OperatingSystem | Format-Table Version } -Session $session | Tee-Object $info_log -Append
     $message = "affichage de la version de l'OS"
     Write-Log $mesage
@@ -825,25 +836,25 @@ function dossSize_use {
 
     $message = "Affichege de la taille du dossier $doss_name"
     Write-Log
-    $session = New-PSSession -ComputerName "172.16.10.20" -Credential "wilder1"
     # Demander à l'utilisateur le chemin du dossier
     $doss_name = Read-Host "Entrez le chemin complet du dossier"
     
-    # Vérifier si le dossier existe
-    if (Test-Path $doss_name) {
+        # Vérifier si le dossier existe
+        if (Test-Path $doss_name) {
         # Calculer la taille totale du dossier
+        Write-Output "Taille du dossier $doss_name" >> $info_log
         Invoke-Command -ScriptBlock { param ($doss_name) Get-ChildItem $doss_name -Recurse | Measure-Object -Property Length -Sum } -argumentlist $doss_name -Session $session
         $dossSizeMB = [math]::Round($dossSize / 1MB, 2) | Tee-Object $info_log -Append# Convertir en Megabytes et arrondir à deux décimales
         Write-Output "Taille du dossier $doss_name " >> $info_log
 
         # Afficher les résultat
         Write-Host "Espace utilisé: $dossSizeMB MB"
-    } 
-    else {
-        # Message si le chemin n'est pas valide
-        Write-Host "Le chemin spécifié n'est pas valide ou n'existe pas."
+        } 
+        else {
+            # Message si le chemin n'est pas valide
+            Write-Host "Le chemin spécifié n'est pas valide ou n'existe pas."
+        }
     }
-}
     
 
 #####################################################
@@ -857,7 +868,7 @@ function lecteur_list {
     $message = "Affichage des lecteurs monté"
     Write-Log
     Write-Output "Liste des lecteurs monter " >> $info_log
-    Invoke-Command -ScriptBlock { [System.IO.DriveInfo]::GetDrives() | Select-Object Name, DriveType | Format-Table -AutoSize } -Session $session | Tee-Object $info_log -Append
+    Invoke-Command -ScriptBlock { [System.IO.DriveInfo]::GetDrives() | Select-Object Name,DriveType | Format-Table -AutoSize } -Session $session | Tee-Object $info_log -Append
 
 }
 
@@ -867,7 +878,9 @@ function lecteur_list {
 # 
 #####################################################
 
-function list_install() {
+function list_install()
+{
+    Write-Output "Liste des Applications instalé" >> $info_log
     Invoke-Command -ScriptBlock { Get-AppxPackage | Select Name } | Tee-Object $info_log -Append
     $message = "affichage des paquets installé"
     Write-Log $mesage
@@ -879,8 +892,10 @@ function list_install() {
 # 
 #####################################################
 
-function service_run() {
-    Invoke-Command -ScriptBlock { Get-Service | Where-Object { $_.Status -eq "running" } | Select-Object Name } | Tee-Object $info_log -Append
+function service_run()
+{
+    Write-Output "Liste des services en cours d'execution" >> $info_log
+    Invoke-Command -ScriptBlock { Get-Service | Where-Object {$_.Status -eq "running"} | Select-Object Name } | Tee-Object $info_log -Append
     $message = "affichage de services en cours d'execution"
     Write-Log $mesage
 }
@@ -891,7 +906,9 @@ function service_run() {
 # 
 #####################################################
 
-function list_user_local() {
+function list_user_local()
+{
+    Write-Output "Liste des utilisateurs locaux" >> $info_log
     Invoke-Command -ScriptBlock { Get-LocalUser | Select-Object Name } -Session $session | Tee-Object $info_log -Append
     $message = "affichage de la liste des utilisateurs local"
     Write-Log $mesage
@@ -903,7 +920,9 @@ function list_user_local() {
 # 
 #####################################################
 
-function ram_total() {
+function ram_total()
+{
+    Write-Output "Affichage de la RAM total" >> $info_log
     Invoke-Command -ScriptBlock { Get-WmiObject Win32_PhysicalMemory | Format-Table capacity } -Session $session | Tee-Object $info_log -Append
 
     $message = "affichage de la ram total"
@@ -1093,7 +1112,6 @@ function Restart-Computer {
     Write-log
     Invoke-Command -ScriptBlock { Restart-Computer -Force } -Session $session 
 }
-
 
 #####################################################
 # Fonction Verrouillage
@@ -1312,10 +1330,18 @@ function Write-Log {
 
 #Variables pour le Fichier Log des demandes d'information
 $Dates = Get-Date -Format "yyyyMMdd"
-$info_log = "C:\Users\Administrator\Documents\info_$choix_users`_$dates.txt"
+$info_log = "$HOME\Documents\info_$choix_users`_$dates.txt"
 
 
 Menu
+
+
+
+
+
+
+
+
 
 
 
