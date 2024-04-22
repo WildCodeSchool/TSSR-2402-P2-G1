@@ -46,13 +46,13 @@ Depuis un serveur, cibler une machine cliente avec un type d’OS différent.
 
 ***Semaine 4:***
 
-|        Nom         | Rôles | Tâche |
-| :----------------: | :---: | :---: |
-|  Ahmed Ben Rebai   |       |       |
-| Alexandre Peyronie |       |       |
-|    Luca Pouilly    |       |       |
-|  Nicolas Claverie  |       |       |
-|   Pierre Girard    |       |       |
+|        Nom         |     Rôles     | Tâche |
+| :----------------: | :-----------: | :---: |
+|  Ahmed Ben Rebai   |    Membre     |       |
+| Alexandre Peyronie | Product Owner |       |
+|    Luca Pouilly    |    Membre     |       |
+|  Nicolas Claverie  | Scrum Master  |       |
+|   Pierre Girard    |    Membre     |       |
 
 ### Choix techniques 
 

@@ -1447,7 +1447,7 @@ Bonjour, bienvenue dans Sumo, merci d'entrer les identifiants à cibler.
 read -p "Quel ordinateur voulez-vous cibler? : " choix_ordinateur
 read -p "Quel utilisateur voulez-vous cibler? : " choix_user
 
-$logs Démarrage du script pour $choix_user sur $choix_ordinateur
+
 
 #Variable pour la connexion SSH
 
@@ -1459,5 +1459,6 @@ file_log=$HOME/Documents/"Info-$choix_ordinateur-$(date +'%Y%m%d').txt"
 # Variable Logger pour le fichier "log_evt.log"
 logs="logger -t $0 $choix_user $choix_ordinateur"
 
+$logs Démarrage du script pour $choix_user sur $choix_ordinateur
 #Lancement de la fonction menu pour initialiser le Script Sumo
 menu 
