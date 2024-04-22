@@ -3,7 +3,7 @@
 
 ## Utilisation de base
 
-### arboressence des menus
+### Arboressence des menus
 
 1. ### Cible utilisateur
         1. Information
@@ -67,7 +67,7 @@
 
         3. Retour au menu précédent
 
-## comment l'utiliser
+## Comment l'utiliser
 
 Pour utiliser SUMO, une fois le script lancé il vous suffit de naviguer dans les menu en tapant le numero correspondant aux choix que voulez voulez effectuer.
 
