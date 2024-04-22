@@ -83,6 +83,3 @@ Une fois la clé copiée avec succès, vous devriez pouvoir vous connecter au se
 
 
 
-## FAQ
-
-Voici quelques solutions aux problèmes courants rencontrés lors de l'installation et de la configuration du projet :
