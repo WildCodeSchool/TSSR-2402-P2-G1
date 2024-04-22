@@ -39,8 +39,47 @@ Vous serez invité à saisir le mot de passe de l'utilisateur sur le serveur Ubu
 Une fois la clé copiée avec succès, vous devriez pouvoir vous connecter au serveur Ubuntu depuis le serveur Debian sans être invité à saisir un mot de passe.
 
 ### Sur le Serveur Windows :
+## Étapes d'Installation et de Configuration
 
+### Sur le Serveur Windows :
 
+1. Assurez-vous que le service WinRM (Windows Remote Management) est activé et en cours d'exécution :
+   - Si nécessaire, ouvrez PowerShell en tant qu'administrateur.
+   - Exécutez la commande suivante pour démarrer le service WinRM :
+     ```powershell
+     Start-Service WinRM
+     ```
+
+2. Configurez WinRM pour permettre l'accès à distance :
+   - Exécutez la commande suivante pour configurer WinRM pour les accès à distance :
+     ```powershell
+     Enable-PSRemoting -Force
+     ```
+
+3. Configurez les règles du pare-feu pour autoriser le trafic WinRM :
+   - Si le pare-feu Windows est activé, vous devez ajouter une règle pour autoriser le trafic sur le port utilisé par WinRM (par défaut, le port est 5985 pour HTTP et 5986 pour HTTPS).
+   - Exécutez la commande suivante pour autoriser le trafic WinRM dans le pare-feu Windows :
+     ```powershell
+     New-NetFirewallRule -Name "WinRM-HTTP" -DisplayName "Windows Remote Management (HTTP-In)" -Enabled True -Direction Inbound -Protocol TCP -LocalPort 5985
+     ```
+
+### Sur le Client Windows :
+
+1. Assurez-vous que le service WinRM est activé et en cours d'exécution :
+   - Si nécessaire, ouvrez PowerShell en tant qu'administrateur.
+   - Exécutez la commande suivante pour démarrer le service WinRM :
+     ```powershell
+     Start-Service WinRM
+     ```
+
+2. Configurez les paramètres de l'hôte distant pour permettre la connexion à distance :
+   - Exécutez la commande suivante pour configurer les paramètres de l'hôte distant :
+     ```powershell
+     Set-Item WSMan:\localhost\Client\TrustedHosts -Value "NomDuServeur" -Force
+     ```
+     Remplacez `"NomDuServeur"` par le nom ou l'adresse IP du serveur Windows auquel vous souhaitez vous connecter.
+
+3. Une fois la configuration terminée, vous devriez pouvoir vous connecter au serveur Windows depuis le client Windows en utilisant PowerShell sans être invité à saisir un mot de passe.
 
 
 
