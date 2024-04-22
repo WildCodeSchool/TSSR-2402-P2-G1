@@ -297,7 +297,7 @@ while true;do
         $logs Groupe d'apartenance de l\'utilisateur $belo_name 
         echo "l'utilisateur $belo_name appartient à " >> $file_log
         $sshtarget "cat /etc/group | grep $belo_name" &&  $sshtarget "cat /etc/group | grep $belo_name" >> $file_log
-        
+        break
         #si non indique que l'utilisateur indiquer n'existe pas 
         else
         echo "L'utilisateur $belo_name n'existe pas "
