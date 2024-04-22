@@ -238,7 +238,7 @@ function last_psswd() {
     
     read -p "De quel utilisateur souhaitez vous voir la derniere modification du mot de passe ? " pass_name
         
-    $sshtarget "chage -l $pass_name | grep modification" && $sshtarget "chage -l $pass_name | grep modification" >> $file_log
+    $sshtarget "sudo chage -l $pass_name | grep modification" && $sshtarget "sudo chage -l $pass_name | grep modification" >> $file_log
     
     $logs Fin de L\'action de la derniere modificaton de mot de passe
     
