@@ -654,7 +654,7 @@ function Computer_Menu {
 function Computer_Menu_Info {
     
     Write-Host "    --------------------------------------------------------------
-    Menu action de l'utilisateur, que souhaitez-vous faire ?
+    Menu information de l'utilisateur, que souhaitez-vous faire ?
     --------------------------------------------------------------
     "
     Write-Host "1. Version de l'OS"
